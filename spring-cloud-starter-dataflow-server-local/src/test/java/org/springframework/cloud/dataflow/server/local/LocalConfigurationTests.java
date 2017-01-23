@@ -18,12 +18,9 @@ package org.springframework.cloud.dataflow.server.local;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-
-import java.util.Map;
 
 import org.junit.After;
 import org.junit.Test;
@@ -36,10 +33,8 @@ import org.springframework.cloud.dataflow.server.local.dataflowapp.LocalTestData
 import org.springframework.cloud.dataflow.server.local.nodataflowapp.LocalTestNoDataFlowServer;
 import org.springframework.cloud.dataflow.server.repository.DeploymentIdRepository;
 import org.springframework.cloud.dataflow.server.repository.StreamDefinitionRepository;
-import org.springframework.cloud.deployer.resource.support.DelegatingResourceLoader;
 import org.springframework.cloud.deployer.spi.local.LocalAppDeployer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.SocketUtils;
 
 /**
@@ -71,20 +66,6 @@ public class LocalConfigurationTests {
 		assertThat(context.containsBean(APP_DEPLOYER_BEAN_NAME), is(true));
 		assertThat(context.getBean(APP_DEPLOYER_BEAN_NAME), instanceOf(LocalAppDeployer.class));
 		assertNotNull(context.getBean(AppRegistry.class));
-	}
-
-	@Test
-	public void testLocalAutoConfigApplied() throws Exception {
-		SpringApplication app = new SpringApplication(LocalTestDataFlowServer.class);
-		context = app.run(new String[] { "--server.port=0" });
-
-		// default on DataFlowControllerAutoConfiguration only adds maven,
-		// LocalDataFlowServerAutoConfiguration also adds docker so test on those.
-		DelegatingResourceLoader delegatingResourceLoader = context.getBean(DelegatingResourceLoader.class);
-		Map<String, ResourceLoader> loaders = TestUtils.readField("loaders", delegatingResourceLoader);
-		assertThat(loaders.size(), is(2));
-		assertThat(loaders.get("maven"), notNullValue());
-		assertThat(loaders.get("docker"), notNullValue());
 	}
 
 	@Test
