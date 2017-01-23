@@ -28,9 +28,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.dataflow.server.EnableDataFlowServer;
-import org.springframework.cloud.dataflow.shell.command.JobCommandTemplate;
-import org.springframework.cloud.dataflow.shell.command.StreamCommandTemplate;
-import org.springframework.cloud.dataflow.shell.command.TaskCommandTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.shell.core.CommandResult;
 import org.springframework.shell.core.JLineShellComponent;
@@ -142,33 +139,6 @@ public abstract class AbstractShellIntegrationTest {
 				applicationContext = null;
 			}
 		}
-	}
-
-	/**
-	 * Return a {@link StreamCommandTemplate} for issuing shell based stream commands.
-	 *
-	 * @return template for issuing stream commands
-	 */
-	protected StreamCommandTemplate stream() {
-		return new StreamCommandTemplate(dataFlowShell);
-	}
-
-	/**
-	 * Return a {@link TaskCommandTemplate} for issuing shell based task commands.
-	 *
-	 * @return template for issuing task commands
-	 */
-	protected TaskCommandTemplate task() {
-		return new TaskCommandTemplate(dataFlowShell);
-	}
-
-	/**
-	 * Return a {@link JobCommandTemplate} for issuing shell based job commands.
-	 *
-	 * @return template for issuing job commands
-	 */
-	protected JobCommandTemplate job() {
-		return new JobCommandTemplate(dataFlowShell);
 	}
 
 	// Util methods

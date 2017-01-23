@@ -70,11 +70,6 @@ public class DataFlowTemplate implements DataFlowOperations {
 	protected final Map<String, UriTemplate> resources = new HashMap<String, UriTemplate>();
 
 	/**
-	 * REST client for stream operations.
-	 */
-	private final StreamOperations streamOperations;
-
-	/**
 	 * REST client for counter operations.
 	 */
 	private final CounterOperations counterOperations;
@@ -88,16 +83,6 @@ public class DataFlowTemplate implements DataFlowOperations {
 	 * REST client for aggregate counter operations.
 	 */
 	private final AggregateCounterOperations aggregateCounterOperations;
-
-	/**
-	 * REST client for task operations.
-	 */
-	private final TaskOperations taskOperations;
-
-	/**
-	 * REST client for job operations.
-	 */
-	private final JobOperations jobOperations;
 
 	/**
 	 * REST client for app registry operations.
@@ -149,14 +134,7 @@ public class DataFlowTemplate implements DataFlowOperations {
 
 		this.restTemplate = prepareRestTemplate(restTemplate);
 		final ResourceSupport resourceSupport = restTemplate.getForObject(baseURI, ResourceSupport.class);
-		if (resourceSupport.hasLink(StreamTemplate.DEFINITIONS_REL)) {
-			this.streamOperations = new StreamTemplate(restTemplate, resourceSupport);
-			this.runtimeOperations = new RuntimeTemplate(restTemplate, resourceSupport);
-		}
-		else {
-			this.streamOperations = null;
-			this.runtimeOperations = null;
-		}
+		this.runtimeOperations = new RuntimeTemplate(restTemplate, resourceSupport);
 		if (resourceSupport.hasLink(CounterTemplate.COUNTER_RELATION)) {
 			this.counterOperations = new CounterTemplate(restTemplate, resourceSupport);
 			this.fieldValueCounterOperations = new FieldValueCounterTemplate(restTemplate, resourceSupport);
@@ -166,14 +144,6 @@ public class DataFlowTemplate implements DataFlowOperations {
 			this.counterOperations = null;
 			this.fieldValueCounterOperations = null;
 			this.aggregateCounterOperations = null;
-		}
-		if (resourceSupport.hasLink(TaskTemplate.DEFINITIONS_RELATION)) {
-			this.taskOperations = new TaskTemplate(restTemplate, resourceSupport);
-			this.jobOperations = new JobTemplate(restTemplate, resourceSupport);
-		}
-		else {
-			this.taskOperations = null;
-			this.jobOperations = null;
 		}
 		this.appRegistryOperations = new AppRegistryTemplate(restTemplate, resourceSupport);
 		this.completionOperations = new CompletionTemplate(restTemplate,
@@ -191,11 +161,6 @@ public class DataFlowTemplate implements DataFlowOperations {
 	}
 
 	@Override
-	public StreamOperations streamOperations() {
-		return streamOperations;
-	}
-
-	@Override
 	public CounterOperations counterOperations() {
 		return counterOperations;
 	}
@@ -208,16 +173,6 @@ public class DataFlowTemplate implements DataFlowOperations {
 	@Override
 	public AggregateCounterOperations aggregateCounterOperations() {
 		return aggregateCounterOperations;
-	}
-
-	@Override
-	public TaskOperations taskOperations() {
-		return taskOperations;
-	}
-
-	@Override
-	public JobOperations jobOperations() {
-		return jobOperations;
 	}
 
 	@Override
