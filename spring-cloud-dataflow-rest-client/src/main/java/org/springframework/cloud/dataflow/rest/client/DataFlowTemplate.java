@@ -20,22 +20,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.JobParameter;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.item.ExecutionContext;
-import org.springframework.cloud.dataflow.rest.client.support.ExecutionContextJacksonMixIn;
-import org.springframework.cloud.dataflow.rest.client.support.ExitStatusJacksonMixIn;
-import org.springframework.cloud.dataflow.rest.client.support.JobExecutionJacksonMixIn;
-import org.springframework.cloud.dataflow.rest.client.support.JobInstanceJacksonMixIn;
-import org.springframework.cloud.dataflow.rest.client.support.JobParameterJacksonMixIn;
-import org.springframework.cloud.dataflow.rest.client.support.JobParametersJacksonMixIn;
-import org.springframework.cloud.dataflow.rest.client.support.StepExecutionHistoryJacksonMixIn;
-import org.springframework.cloud.dataflow.rest.client.support.StepExecutionJacksonMixIn;
-import org.springframework.cloud.dataflow.rest.job.StepExecutionHistory;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.UriTemplate;
@@ -191,19 +175,7 @@ public class DataFlowTemplate implements DataFlowOperations {
 	}
 
 	/**
-	 * Will augment the provided {@link RestTemplate} with the Jackson Mixins required by Spring Cloud Data Flow,
-	 * specifically:
-	 *
-	 * <p><ul>
-	 * <li>{@link JobExecutionJacksonMixIn}
-	 * <li>{@link JobParametersJacksonMixIn}
-	 * <li>{@link JobParameterJacksonMixIn}
-	 * <li>{@link JobInstanceJacksonMixIn}
-	 * <li>{@link ExitStatusJacksonMixIn}
-	 * <li>{@link StepExecutionJacksonMixIn}
-	 * <li>{@link ExecutionContextJacksonMixIn}
-	 * <li>{@link StepExecutionHistoryJacksonMixIn}
-	 * </ul><p>
+	 * Will augment the provided {@link RestTemplate} with the Jackson
 	 *
 	 * Furthermore, this method will also register the {@link Jackson2HalModule}
 	 *
@@ -224,15 +196,7 @@ public class DataFlowTemplate implements DataFlowOperations {
 				containsMappingJackson2HttpMessageConverter = true;
 				final MappingJackson2HttpMessageConverter jacksonConverter = (MappingJackson2HttpMessageConverter) converter;
 				jacksonConverter.getObjectMapper()
-					.registerModule(new Jackson2HalModule())
-					.addMixIn(JobExecution.class, JobExecutionJacksonMixIn.class)
-					.addMixIn(JobParameters.class, JobParametersJacksonMixIn.class)
-					.addMixIn(JobParameter.class, JobParameterJacksonMixIn.class)
-					.addMixIn(JobInstance.class, JobInstanceJacksonMixIn.class)
-					.addMixIn(ExitStatus.class, ExitStatusJacksonMixIn.class)
-					.addMixIn(StepExecution.class, StepExecutionJacksonMixIn.class)
-					.addMixIn(ExecutionContext.class, ExecutionContextJacksonMixIn.class)
-					.addMixIn(StepExecutionHistory.class, StepExecutionHistoryJacksonMixIn.class);
+					.registerModule(new Jackson2HalModule());
 			}
 		}
 
