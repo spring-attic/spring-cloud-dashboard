@@ -38,9 +38,7 @@ public class FeaturesConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	@ConditionalOnExpression("#{'${" + FeaturesProperties.FEATURES_PREFIX + "."
-			+ FeaturesProperties.STREAMS_ENABLED + ":true}'.equalsIgnoreCase('true') || "
-			+ "'${" + FeaturesProperties.FEATURES_PREFIX + "."
-			+ FeaturesProperties.TASKS_ENABLED + ":true}'.equalsIgnoreCase('true') }")
+			+ FeaturesProperties.STREAMS_ENABLED + ":true}'.equalsIgnoreCase('true')}")
 	public DeploymentIdRepository deploymentIdRepository(DataSource dataSource) {
 		return new RdbmsDeploymentIdRepository(dataSource);
 	}

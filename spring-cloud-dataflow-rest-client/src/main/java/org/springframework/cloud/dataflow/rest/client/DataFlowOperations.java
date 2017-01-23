@@ -26,21 +26,6 @@ package org.springframework.cloud.dataflow.rest.client;
 public interface DataFlowOperations {
 
 	/**
-	 * Counter related operations.
-	 */
-	CounterOperations counterOperations();
-
-	/**
-	 * Field Value Counter related operations.
-	 */
-	FieldValueCounterOperations fieldValueCounterOperations();
-
-	/**
-	 * Aggregate Counter related operations.
-	 */
-	AggregateCounterOperations aggregateCounterOperations();
-
-	/**
 	 * Application registry related operations.
 	 */
 	AppRegistryOperations appRegistryOperations();

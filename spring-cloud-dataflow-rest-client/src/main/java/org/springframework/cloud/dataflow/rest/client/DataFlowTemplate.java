@@ -54,21 +54,6 @@ public class DataFlowTemplate implements DataFlowOperations {
 	protected final Map<String, UriTemplate> resources = new HashMap<String, UriTemplate>();
 
 	/**
-	 * REST client for counter operations.
-	 */
-	private final CounterOperations counterOperations;
-
-	/**
-	 * REST client for field value counter operations.
-	 */
-	private final FieldValueCounterOperations fieldValueCounterOperations;
-
-	/**
-	 * REST client for aggregate counter operations.
-	 */
-	private final AggregateCounterOperations aggregateCounterOperations;
-
-	/**
 	 * REST client for app registry operations.
 	 */
 	private final AppRegistryOperations appRegistryOperations;
@@ -119,16 +104,6 @@ public class DataFlowTemplate implements DataFlowOperations {
 		this.restTemplate = prepareRestTemplate(restTemplate);
 		final ResourceSupport resourceSupport = restTemplate.getForObject(baseURI, ResourceSupport.class);
 		this.runtimeOperations = new RuntimeTemplate(restTemplate, resourceSupport);
-		if (resourceSupport.hasLink(CounterTemplate.COUNTER_RELATION)) {
-			this.counterOperations = new CounterTemplate(restTemplate, resourceSupport);
-			this.fieldValueCounterOperations = new FieldValueCounterTemplate(restTemplate, resourceSupport);
-			this.aggregateCounterOperations = new AggregateCounterTemplate(restTemplate, resourceSupport);
-		}
-		else {
-			this.counterOperations = null;
-			this.fieldValueCounterOperations = null;
-			this.aggregateCounterOperations = null;
-		}
 		this.appRegistryOperations = new AppRegistryTemplate(restTemplate, resourceSupport);
 		this.completionOperations = new CompletionTemplate(restTemplate,
 			resourceSupport.getLink("completions/stream"),
@@ -142,21 +117,6 @@ public class DataFlowTemplate implements DataFlowOperations {
 					+ resourceSupport + "'");
 		}
 		return link;
-	}
-
-	@Override
-	public CounterOperations counterOperations() {
-		return counterOperations;
-	}
-
-	@Override
-	public FieldValueCounterOperations fieldValueCounterOperations() {
-		return fieldValueCounterOperations;
-	}
-
-	@Override
-	public AggregateCounterOperations aggregateCounterOperations() {
-		return aggregateCounterOperations;
 	}
 
 	@Override

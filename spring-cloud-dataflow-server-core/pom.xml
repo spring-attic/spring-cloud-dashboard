@@ -82,10 +82,6 @@
 			<artifactId>spring-plugin-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.analytics</groupId>
-			<artifactId>spring-analytics</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>

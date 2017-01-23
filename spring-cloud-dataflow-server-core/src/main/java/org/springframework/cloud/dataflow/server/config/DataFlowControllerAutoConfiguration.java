@@ -21,11 +21,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.springframework.analytics.metrics.AggregateCounterRepository;
-import org.springframework.analytics.metrics.FieldValueCounterRepository;
-import org.springframework.analytics.rest.controller.AggregateCounterController;
-import org.springframework.analytics.rest.controller.CounterController;
-import org.springframework.analytics.rest.controller.FieldValueCounterController;
 import org.springframework.batch.admin.service.JobService;
 import org.springframework.boot.actuate.metrics.repository.MetricRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -139,24 +134,6 @@ public class DataFlowControllerAutoConfiguration {
 		Map<String, ResourceLoader> loaders = new HashMap<>();
 		loaders.put("maven", mavenResourceLoader);
 		return new DelegatingResourceLoader(loaders);
-	}
-
-	@Bean
-	@ConditionalOnBean(MetricRepository.class)
-	public CounterController counterController(MetricRepository metricRepository) {
-		return new CounterController(metricRepository);
-	}
-
-	@Bean
-	@ConditionalOnBean(FieldValueCounterRepository.class)
-	public FieldValueCounterController fieldValueCounterController(FieldValueCounterRepository repository) {
-		return new FieldValueCounterController(repository);
-	}
-
-	@Bean
-	@ConditionalOnBean(AggregateCounterRepository.class)
-	public AggregateCounterController aggregateCounterController(AggregateCounterRepository repository) {
-		return new AggregateCounterController(repository);
 	}
 
 	@Bean

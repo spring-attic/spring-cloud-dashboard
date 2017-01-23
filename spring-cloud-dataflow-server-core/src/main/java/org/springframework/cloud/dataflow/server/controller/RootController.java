@@ -18,9 +18,6 @@ package org.springframework.cloud.dataflow.server.controller;
 
 import static org.springframework.cloud.dataflow.server.controller.UiController.dashboard;
 
-import org.springframework.analytics.rest.domain.AggregateCounterResource;
-import org.springframework.analytics.rest.domain.CounterResource;
-import org.springframework.analytics.rest.domain.FieldValueCounterResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.dataflow.rest.resource.AppInstanceStatusResource;
@@ -85,16 +82,6 @@ public class RootController {
 			resourceSupport.add(entityLinks.linkToCollectionResource(AppStatusResource.class).withRel("runtime/apps"));
 			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkForSingleResource(AppStatusResource.class, "{appId}").withRel("runtime/apps/app")));
 			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkFor(AppInstanceStatusResource.class, UriComponents.UriTemplateVariables.SKIP_VALUE).withRel("runtime/apps/instances")));
-		}
-		if (featuresProperties.isAnalyticsEnabled()) {
-			resourceSupport.add(entityLinks.linkToCollectionResource(CounterResource.class).withRel("counters"));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkToSingleResource(CounterResource.class, "{name}").withRel("counters/counter")));
-			resourceSupport.add(entityLinks.linkToCollectionResource(FieldValueCounterResource.class).withRel("field-value-counters"));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkToSingleResource(FieldValueCounterResource.class, "{name}").withRel("field-value-counters/counter")));
-			resourceSupport.add(
-					entityLinks.linkToCollectionResource(AggregateCounterResource.class).withRel("aggregate-counters"));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks
-					.linkToSingleResource(AggregateCounterResource.class, "{name}").withRel("aggregate-counters/counter")));
 		}
 		resourceSupport.add(entityLinks.linkToCollectionResource(AppRegistrationResource.class).withRel("apps"));
 		String completionStreamTemplated = entityLinks.linkFor(CompletionProposalsResource.class).withSelfRel().getHref() + ("/stream{?start,detailLevel}");
