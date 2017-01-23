@@ -36,8 +36,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
  * @author Ilayaperumal Gopinathan
  */
 @Configuration
-@Import({ AnalyticsConfiguration.class, StreamConfiguration.class,
-		TaskConfiguration.class })
+@Import({ AnalyticsConfiguration.class, StreamConfiguration.class })
 public class FeaturesConfiguration {
 
 	@Autowired

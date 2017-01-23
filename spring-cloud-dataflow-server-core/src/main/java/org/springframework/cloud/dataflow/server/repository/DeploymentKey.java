@@ -17,7 +17,6 @@
 package org.springframework.cloud.dataflow.server.repository;
 
 import org.springframework.cloud.dataflow.core.StreamAppDefinition;
-import org.springframework.cloud.dataflow.core.TaskDefinition;
 import org.springframework.util.Assert;
 
 /**
@@ -36,15 +35,5 @@ public abstract class DeploymentKey {
 	public static String forStreamAppDefinition(StreamAppDefinition streamAppDefinition) {
 		Assert.notNull(streamAppDefinition, "streamAppDefinition must not be null");
 		return String.format("%s.%s", streamAppDefinition.getStreamName(), streamAppDefinition.getName());
-	}
-
-	/**
-	 * Determines a deployment key for a task application.
-	 *
-	 * @param taskDefinition the task application definition
-	 */
-	public static String forTaskDefinition(TaskDefinition taskDefinition) {
-		Assert.notNull(taskDefinition, "taskDefinition must not be null");
-		return String.format("%s.%s", taskDefinition.getRegisteredAppName(), taskDefinition.getName());
 	}
 }

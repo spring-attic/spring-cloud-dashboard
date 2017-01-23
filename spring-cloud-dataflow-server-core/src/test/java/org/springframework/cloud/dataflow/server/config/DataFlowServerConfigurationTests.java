@@ -30,8 +30,6 @@ import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.cloud.dataflow.server.EnableDataFlowServer;
-import org.springframework.cloud.dataflow.server.service.TaskService;
-import org.springframework.cloud.dataflow.server.service.impl.DefaultTaskService;
 import org.springframework.cloud.deployer.spi.app.AppDeployer;
 import org.springframework.cloud.deployer.spi.task.TaskLauncher;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -143,11 +141,6 @@ public class DataFlowServerConfigurationTests {
 		@Bean
 		public AuthenticationManager authenticationManager() {
 			return mock(AuthenticationManager.class);
-		}
-
-		@Bean
-		public TaskService taskService() {
-			return mock(DefaultTaskService.class);
 		}
 	}
 }

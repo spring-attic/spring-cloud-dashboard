@@ -25,7 +25,6 @@ import org.springframework.cloud.dataflow.core.ApplicationType;
 import org.springframework.cloud.dataflow.core.BindingPropertyKeys;
 import org.springframework.cloud.dataflow.core.StreamAppDefinition;
 import org.springframework.cloud.dataflow.core.StreamDefinition;
-import org.springframework.cloud.dataflow.core.TaskPropertyKeys;
 
 /**
  * Various utility methods used throughout the completion package.
@@ -46,7 +45,6 @@ public class CompletionUtils {
 		IMPLICIT_PARAMETER_NAMES.add(BindingPropertyKeys.INPUT_GROUP);
 		IMPLICIT_PARAMETER_NAMES.add(BindingPropertyKeys.OUTPUT_REQUIRED_GROUPS);
 		IMPLICIT_PARAMETER_NAMES.add(BindingPropertyKeys.OUTPUT_DESTINATION);
-		IMPLICIT_TASK_PARAMETER_NAMES.add(TaskPropertyKeys.TASK_NAME);
 	}
 
 

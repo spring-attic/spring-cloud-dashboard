@@ -36,10 +36,8 @@ import org.springframework.cloud.dataflow.server.local.dataflowapp.LocalTestData
 import org.springframework.cloud.dataflow.server.local.nodataflowapp.LocalTestNoDataFlowServer;
 import org.springframework.cloud.dataflow.server.repository.DeploymentIdRepository;
 import org.springframework.cloud.dataflow.server.repository.StreamDefinitionRepository;
-import org.springframework.cloud.dataflow.server.repository.TaskDefinitionRepository;
 import org.springframework.cloud.deployer.resource.support.DelegatingResourceLoader;
 import org.springframework.cloud.deployer.spi.local.LocalAppDeployer;
-import org.springframework.cloud.deployer.spi.local.LocalTaskLauncher;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.SocketUtils;
@@ -55,8 +53,6 @@ import org.springframework.util.SocketUtils;
 public class LocalConfigurationTests {
 
 	private static final String APP_DEPLOYER_BEAN_NAME = "appDeployer";
-
-	private static final String TASK_LAUNCHER_BEAN_NAME = "taskLauncher";
 
 	private ConfigurableApplicationContext context;
 
@@ -74,8 +70,6 @@ public class LocalConfigurationTests {
 				"--spring.datasource.url=" + dataSourceUrl});
 		assertThat(context.containsBean(APP_DEPLOYER_BEAN_NAME), is(true));
 		assertThat(context.getBean(APP_DEPLOYER_BEAN_NAME), instanceOf(LocalAppDeployer.class));
-		assertThat(context.containsBean(TASK_LAUNCHER_BEAN_NAME), is(true));
-		assertThat(context.getBean(TASK_LAUNCHER_BEAN_NAME), instanceOf(LocalTaskLauncher.class));
 		assertNotNull(context.getBean(AppRegistry.class));
 	}
 
@@ -98,7 +92,6 @@ public class LocalConfigurationTests {
 		SpringApplication app = new SpringApplication(LocalTestDataFlowServer.class);
 		context = app.run(new String[] { "--server.port=0",
 				"--" + FeaturesProperties.FEATURES_PREFIX + "." + FeaturesProperties.STREAMS_ENABLED + "=false"});
-		assertNotNull(context.getBean(TaskDefinitionRepository.class));
 		assertNotNull(context.getBean(DeploymentIdRepository.class));
 		assertNotNull(context.getBean(FieldValueCounterRepository.class));
 		try {
@@ -110,28 +103,11 @@ public class LocalConfigurationTests {
 	}
 
 	@Test
-	public void testConfigWithTasksDisabled() {
-		SpringApplication app = new SpringApplication(LocalTestDataFlowServer.class);
-		context = app.run(new String[] { "--server.port=0",
-				"--" + FeaturesProperties.FEATURES_PREFIX + "." + FeaturesProperties.TASKS_ENABLED + "=false"});
-		assertNotNull(context.getBean(StreamDefinitionRepository.class));
-		assertNotNull(context.getBean(DeploymentIdRepository.class));
-		assertNotNull(context.getBean(FieldValueCounterRepository.class));
-		try {
-			context.getBean(TaskDefinitionRepository.class);
-			fail("Task features should have been disabled.");
-		}
-		catch (NoSuchBeanDefinitionException e) {
-		}
-	}
-
-	@Test
 	public void testConfigWithAnalyticsDisabled() {
 		SpringApplication app = new SpringApplication(LocalTestDataFlowServer.class);
 		context = app.run(new String[]{"--server.port=0",
 				"--" + FeaturesProperties.FEATURES_PREFIX + "." + FeaturesProperties.ANALYTICS_ENABLED + "=false"});;
 		assertNotNull(context.getBean(StreamDefinitionRepository.class));
-		assertNotNull(context.getBean(TaskDefinitionRepository.class));
 		assertNotNull(context.getBean(DeploymentIdRepository.class));
 		try {
 			context.getBean(FieldValueCounterRepository.class);
@@ -147,7 +123,6 @@ public class LocalConfigurationTests {
 		context = app.run(new String[] { "--server.port=0" });
 		// we still have deployer beans
 		assertThat(context.containsBean(APP_DEPLOYER_BEAN_NAME), is(true));
-		assertThat(context.containsBean(TASK_LAUNCHER_BEAN_NAME), is(true));
 		assertThat(context.containsBean("appRegistry"), is(false));
 	}
 }

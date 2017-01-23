@@ -25,7 +25,6 @@ import org.junit.Test;
 
 import org.springframework.cloud.dataflow.core.StreamAppDefinition;
 import org.springframework.cloud.dataflow.core.StreamDefinition;
-import org.springframework.cloud.dataflow.core.TaskDefinition;
 
 /**
  * @author Janne Valkealahti
@@ -40,19 +39,14 @@ public class InMemoryDeploymentIdRepositoryTests {
 		StreamAppDefinition[] appDefinitions1 = streamDefinition1.getAppDefinitions().toArray(new StreamAppDefinition[0]);
 		StreamDefinition streamDefinition2 = new StreamDefinition("myStream1", "time | log");
 		StreamAppDefinition[] appDefinitions2 = streamDefinition2.getAppDefinitions().toArray(new StreamAppDefinition[0]);
-		TaskDefinition taskDefinition1 = new TaskDefinition("myTask", "timestamp");
-		TaskDefinition taskDefinition2 = new TaskDefinition("myTask", "timestamp");
 		String appDeploymentKey1 = DeploymentKey.forStreamAppDefinition(appDefinitions1[0]);
 		String appDeploymentKey2 = DeploymentKey.forStreamAppDefinition(appDefinitions1[1]);
 		String appDeploymentKey3 = DeploymentKey.forStreamAppDefinition(appDefinitions2[0]);
 		String appDeploymentKey4 = DeploymentKey.forStreamAppDefinition(appDefinitions2[1]);
-		String appDeploymentKey5 = DeploymentKey.forTaskDefinition(taskDefinition1);
-		String appDeploymentKey6 = DeploymentKey.forTaskDefinition(taskDefinition2);
 
 		DeploymentIdRepository repository = new InMemoryDeploymentIdRepository();
 		repository.save(appDeploymentKey1, "id1");
 		repository.save(appDeploymentKey2, "id2");
-		repository.save(appDeploymentKey5, "id3");
 
 		String findOne1 = repository.findOne(appDeploymentKey1);
 		assertThat(findOne1, notNullValue());
@@ -67,31 +61,20 @@ public class InMemoryDeploymentIdRepositoryTests {
 		String findOne4 = repository.findOne(appDeploymentKey4);
 		assertThat(findOne4, notNullValue());
 		assertThat(findOne4, is("id2"));
-
-		String findOne5 = repository.findOne(appDeploymentKey5);
-		assertThat(findOne5, notNullValue());
-		assertThat(findOne5, is("id3"));
-		String findOne6 = repository.findOne(appDeploymentKey6);
-		assertThat(findOne6, notNullValue());
-		assertThat(findOne6, is("id3"));
 	}
 
 	@Test
 	public void testDeleteKey() {
 		StreamDefinition streamDefinition1 = new StreamDefinition("myStream1", "time | log");
 		StreamAppDefinition[] appDefinitions1 = streamDefinition1.getAppDefinitions().toArray(new StreamAppDefinition[0]);
-		TaskDefinition taskDefinition1 = new TaskDefinition("myTask", "timestamp");
 		String appDeploymentKey1 = DeploymentKey.forStreamAppDefinition(appDefinitions1[0]);
 		String appDeploymentKey2 = DeploymentKey.forStreamAppDefinition(appDefinitions1[1]);
-		String appDeploymentKey3 = DeploymentKey.forTaskDefinition(taskDefinition1);
 
 		DeploymentIdRepository repository = new InMemoryDeploymentIdRepository();
 		repository.save(appDeploymentKey1, "id1");
 		repository.save(appDeploymentKey2, "id2");
-		repository.save(appDeploymentKey3, "id3");
 		repository.delete(appDeploymentKey1);
 		assertThat(repository.findOne(appDeploymentKey1), nullValue());
 		assertThat(repository.findOne(appDeploymentKey2), notNullValue());
-		assertThat(repository.findOne(appDeploymentKey3), notNullValue());
 	}
 }

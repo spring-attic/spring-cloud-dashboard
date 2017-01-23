@@ -23,7 +23,6 @@ import org.junit.Test;
 
 import org.springframework.cloud.dataflow.core.StreamAppDefinition;
 import org.springframework.cloud.dataflow.core.StreamDefinition;
-import org.springframework.cloud.dataflow.core.TaskDefinition;
 
 /**
  * @author Janne Valkealahti
@@ -43,20 +42,6 @@ public class DeploymentKeyTests {
 		String appDeploymentKey4 = DeploymentKey.forStreamAppDefinition(appDefinitions2[1]);
 
 		assertThat(streamDefinition1.equals(streamDefinition2), is(true));
-		assertThat(appDeploymentKey1.equals(appDeploymentKey3), is(true));
-		assertThat(appDeploymentKey2.equals(appDeploymentKey4), is(true));
-	}
-
-	@Test
-	public void testTaskAppDeploymentKeyEquals() {
-		TaskDefinition taskDefinition1 = new TaskDefinition("myTask1", "testTask");
-		TaskDefinition taskDefinition2 = new TaskDefinition("myTask1", "testTask");
-		String appDeploymentKey1 = DeploymentKey.forTaskDefinition(taskDefinition1);
-		String appDeploymentKey2 = DeploymentKey.forTaskDefinition(taskDefinition1);
-		String appDeploymentKey3 = DeploymentKey.forTaskDefinition(taskDefinition2);
-		String appDeploymentKey4 = DeploymentKey.forTaskDefinition(taskDefinition2);
-
-		assertThat(taskDefinition1.equals(taskDefinition2), is(true));
 		assertThat(appDeploymentKey1.equals(appDeploymentKey3), is(true));
 		assertThat(appDeploymentKey2.equals(appDeploymentKey4), is(true));
 	}

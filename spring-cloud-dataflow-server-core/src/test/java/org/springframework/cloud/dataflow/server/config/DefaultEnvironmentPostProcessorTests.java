@@ -25,8 +25,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.session.SessionAutoConfiguration;
 import org.springframework.cloud.dataflow.server.EnableDataFlowServer;
-import org.springframework.cloud.dataflow.server.service.TaskService;
-import org.springframework.cloud.dataflow.server.service.impl.DefaultTaskService;
 import org.springframework.cloud.deployer.spi.app.AppDeployer;
 import org.springframework.cloud.deployer.spi.task.TaskLauncher;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -83,11 +81,6 @@ public class DefaultEnvironmentPostProcessorTests {
 		@Bean
 		public AuthenticationManager authenticationManager() {
 			return mock(AuthenticationManager.class);
-		}
-
-		@Bean
-		public TaskService taskService() {
-			return mock(DefaultTaskService.class);
 		}
 	}
 }
