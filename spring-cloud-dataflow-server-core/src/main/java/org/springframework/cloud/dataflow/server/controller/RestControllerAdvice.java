@@ -30,7 +30,6 @@ import org.springframework.batch.core.launch.NoSuchJobInstanceException;
 import org.springframework.boot.actuate.endpoint.mvc.MetricsMvcEndpoint;
 import org.springframework.cloud.dataflow.registry.support.NoSuchAppRegistrationException;
 import org.springframework.cloud.dataflow.server.controller.support.InvalidStreamDefinitionException;
-import org.springframework.cloud.dataflow.server.job.support.JobNotRestartableException;
 import org.springframework.cloud.dataflow.server.repository.DuplicateStreamDefinitionException;
 import org.springframework.cloud.dataflow.server.repository.DuplicateTaskException;
 import org.springframework.cloud.dataflow.server.repository.NoSuchStreamDefinitionException;
@@ -84,22 +83,6 @@ public class RestControllerAdvice {
 	@ResponseStatus(HttpStatus.CONFLICT)
 	@ResponseBody
 	public VndErrors onConflictException(Exception e) {
-		String logref = logWarnLevelExceptionMessage(e);
-		if (logger.isTraceEnabled()) {
-			logTraceLevelStrackTrace(e);
-		}
-		String msg = getExceptionMessage(e);
-		return new VndErrors(logref, msg);
-	}
-
-	/**
-	 * Log the exception message at warn level and stack trace as trace level.
-	 * Return response status HttpStatus.UNPROCESSABLE_ENTITY
-	 */
-	@ExceptionHandler({JobNotRestartableException.class, JobExecutionNotRunningException.class})
-	@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-	@ResponseBody
-	public VndErrors onUnprocessableEntityException(Exception e) {
 		String logref = logWarnLevelExceptionMessage(e);
 		if (logger.isTraceEnabled()) {
 			logTraceLevelStrackTrace(e);

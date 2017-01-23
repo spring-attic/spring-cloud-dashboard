@@ -27,8 +27,6 @@ import org.springframework.cloud.dataflow.rest.resource.AppInstanceStatusResourc
 import org.springframework.cloud.dataflow.rest.resource.AppRegistrationResource;
 import org.springframework.cloud.dataflow.rest.resource.AppStatusResource;
 import org.springframework.cloud.dataflow.rest.resource.CompletionProposalsResource;
-import org.springframework.cloud.dataflow.rest.resource.StepExecutionProgressInfoResource;
-import org.springframework.cloud.dataflow.rest.resource.StepExecutionResource;
 import org.springframework.cloud.dataflow.rest.resource.StreamDefinitionResource;
 import org.springframework.cloud.dataflow.rest.resource.StreamDeploymentResource;
 import org.springframework.cloud.dataflow.server.config.features.FeaturesProperties;
