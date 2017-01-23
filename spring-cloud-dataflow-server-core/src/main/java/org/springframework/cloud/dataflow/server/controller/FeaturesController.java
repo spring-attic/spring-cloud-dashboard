@@ -1,10 +1,6 @@
 package org.springframework.cloud.dataflow.server.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.dataflow.rest.resource.FeaturesInfoResource;
-import org.springframework.cloud.dataflow.rest.resource.security.SecurityInfoResource;
 import org.springframework.cloud.dataflow.server.config.features.FeaturesProperties;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
@@ -40,7 +36,6 @@ public class FeaturesController {
 		FeaturesInfoResource featuresInfoResource = new FeaturesInfoResource();
 		featuresInfoResource.setAnalyticsEnabled(featuresProperties.isAnalyticsEnabled());
 		featuresInfoResource.setStreamsEnabled(featuresProperties.isStreamsEnabled());
-		featuresInfoResource.setTasksEnabled(featuresProperties.isTasksEnabled());
 		return featuresInfoResource;
 	}
 }

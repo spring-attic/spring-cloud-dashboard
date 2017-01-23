@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.dataflow.completion.CompletionConfiguration;
 import org.springframework.cloud.dataflow.completion.StreamCompletionProvider;
@@ -37,17 +36,11 @@ import org.springframework.cloud.dataflow.server.controller.CompletionController
 import org.springframework.cloud.dataflow.server.controller.RestControllerAdvice;
 import org.springframework.cloud.dataflow.server.controller.StreamDefinitionController;
 import org.springframework.cloud.dataflow.server.controller.StreamDeploymentController;
-import org.springframework.cloud.dataflow.server.controller.TaskDefinitionController;
-import org.springframework.cloud.dataflow.server.controller.TaskExecutionController;
 import org.springframework.cloud.dataflow.server.registry.DataFlowUriRegistryPopulator;
 import org.springframework.cloud.dataflow.server.repository.DeploymentIdRepository;
 import org.springframework.cloud.dataflow.server.repository.InMemoryDeploymentIdRepository;
 import org.springframework.cloud.dataflow.server.repository.InMemoryStreamDefinitionRepository;
-import org.springframework.cloud.dataflow.server.repository.InMemoryTaskDefinitionRepository;
 import org.springframework.cloud.dataflow.server.repository.StreamDefinitionRepository;
-import org.springframework.cloud.dataflow.server.repository.TaskDefinitionRepository;
-import org.springframework.cloud.dataflow.server.service.TaskService;
-import org.springframework.cloud.dataflow.server.service.impl.DefaultTaskService;
 import org.springframework.cloud.deployer.resource.maven.MavenProperties;
 import org.springframework.cloud.deployer.resource.maven.MavenResourceLoader;
 import org.springframework.cloud.deployer.resource.registry.InMemoryUriRegistry;
@@ -132,18 +125,6 @@ public class TestDependencies extends WebMvcConfigurationSupport {
 	}
 
 	@Bean
-	public TaskDefinitionController taskDefinitionController(TaskDefinitionRepository repository,
-			DeploymentIdRepository deploymentIdRepository) {
-		return new TaskDefinitionController(repository, deploymentIdRepository, taskLauncher(), appRegistry());
-	}
-	@Bean
-	public TaskExecutionController taskExecutionController(TaskExplorer explorer,
-		ApplicationConfigurationMetadataResolver metadataResolver,
-		TaskDefinitionRepository taskDefinitionRepository) {
-		return new TaskExecutionController(explorer, taskService(metadataResolver), taskDefinitionRepository);
-	}
-
-	@Bean
 	public UriRegistry uriRegistry() {
 		return new InMemoryUriRegistry();
 	}
@@ -179,19 +160,8 @@ public class TestDependencies extends WebMvcConfigurationSupport {
 	}
 
 	@Bean
-	public TaskService taskService(ApplicationConfigurationMetadataResolver metadataResolver) {
-		return new DefaultTaskService(new DataSourceProperties(), taskDefinitionRepository(), deploymentIdRepository(),
-				uriRegistry(), resourceLoader(), taskLauncher(), metadataResolver);
-	}
-
-	@Bean
 	public StreamDefinitionRepository streamDefinitionRepository() {
 		return new InMemoryStreamDefinitionRepository();
-	}
-
-	@Bean
-	public TaskDefinitionRepository taskDefinitionRepository() {
-		return new InMemoryTaskDefinitionRepository();
 	}
 
 	@Bean

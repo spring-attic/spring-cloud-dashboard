@@ -45,8 +45,6 @@ import org.springframework.cloud.dataflow.server.config.features.FeaturesPropert
 import org.springframework.cloud.dataflow.server.controller.AppRegistryController;
 import org.springframework.cloud.dataflow.server.controller.CompletionController;
 import org.springframework.cloud.dataflow.server.controller.FeaturesController;
-import org.springframework.cloud.dataflow.server.controller.JobExecutionController;
-import org.springframework.cloud.dataflow.server.controller.JobInstanceController;
 import org.springframework.cloud.dataflow.server.controller.JobStepExecutionController;
 import org.springframework.cloud.dataflow.server.controller.JobStepExecutionProgressController;
 import org.springframework.cloud.dataflow.server.controller.RestControllerAdvice;
@@ -55,8 +53,6 @@ import org.springframework.cloud.dataflow.server.controller.RuntimeAppsControlle
 import org.springframework.cloud.dataflow.server.controller.RuntimeAppsController.AppInstanceController;
 import org.springframework.cloud.dataflow.server.controller.StreamDefinitionController;
 import org.springframework.cloud.dataflow.server.controller.StreamDeploymentController;
-import org.springframework.cloud.dataflow.server.controller.TaskDefinitionController;
-import org.springframework.cloud.dataflow.server.controller.TaskExecutionController;
 import org.springframework.cloud.dataflow.server.controller.UiController;
 import org.springframework.cloud.dataflow.server.controller.security.LoginController;
 import org.springframework.cloud.dataflow.server.controller.security.SecurityController;
@@ -149,44 +145,6 @@ public class DataFlowControllerAutoConfiguration {
 		Map<String, ResourceLoader> loaders = new HashMap<>();
 		loaders.put("maven", mavenResourceLoader);
 		return new DelegatingResourceLoader(loaders);
-	}
-
-	@Bean
-	@ConditionalOnBean(TaskDefinitionRepository.class)
-	public TaskDefinitionController taskDefinitionController(TaskDefinitionRepository repository,
-			DeploymentIdRepository deploymentIdRepository, TaskLauncher taskLauncher, AppRegistry appRegistry) {
-		return new TaskDefinitionController(repository, deploymentIdRepository, taskLauncher, appRegistry);
-	}
-
-	@Bean
-	@ConditionalOnBean(TaskDefinitionRepository.class)
-	public TaskExecutionController taskExecutionController(TaskExplorer explorer, TaskService taskService,
-		TaskDefinitionRepository taskDefinitionRepository) {
-		return new TaskExecutionController(explorer, taskService, taskDefinitionRepository);
-	}
-
-	@Bean
-	@ConditionalOnBean(TaskDefinitionRepository.class)
-	public JobExecutionController jobExecutionController(TaskJobService repository) {
-		return new JobExecutionController(repository);
-	}
-
-	@Bean
-	@ConditionalOnBean(TaskDefinitionRepository.class)
-	public JobStepExecutionController jobStepExecutionController(JobService service) {
-		return new JobStepExecutionController(service);
-	}
-
-	@Bean
-	@ConditionalOnBean(TaskDefinitionRepository.class)
-	public JobStepExecutionProgressController jobStepExecutionProgressController(JobService service) {
-		return new JobStepExecutionProgressController(service);
-	}
-
-	@Bean
-	@ConditionalOnBean(TaskDefinitionRepository.class)
-	public JobInstanceController jobInstanceController(TaskJobService repository) {
-		return new JobInstanceController(repository);
 	}
 
 	@Bean

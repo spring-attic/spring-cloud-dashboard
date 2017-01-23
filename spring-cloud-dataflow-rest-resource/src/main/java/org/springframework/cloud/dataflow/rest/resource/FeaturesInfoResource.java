@@ -34,8 +34,6 @@ public class FeaturesInfoResource extends ResourceSupport {
 
 	private boolean streamsEnabled = true;
 
-	private boolean tasksEnabled = true;
-
 	public boolean isAnalyticsEnabled() {
 		return this.analyticsEnabled;
 	}
@@ -51,14 +49,5 @@ public class FeaturesInfoResource extends ResourceSupport {
 	public void setStreamsEnabled(boolean streamsEnabled) {
 		this.streamsEnabled = streamsEnabled;
 	}
-
-	public boolean isTasksEnabled() {
-		return this.tasksEnabled;
-	}
-
-	public void setTasksEnabled(boolean tasksEnabled) {
-		this.tasksEnabled = tasksEnabled;
-	}
-
 
 }

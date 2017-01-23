@@ -27,14 +27,10 @@ import org.springframework.cloud.dataflow.rest.resource.AppInstanceStatusResourc
 import org.springframework.cloud.dataflow.rest.resource.AppRegistrationResource;
 import org.springframework.cloud.dataflow.rest.resource.AppStatusResource;
 import org.springframework.cloud.dataflow.rest.resource.CompletionProposalsResource;
-import org.springframework.cloud.dataflow.rest.resource.JobExecutionResource;
-import org.springframework.cloud.dataflow.rest.resource.JobInstanceResource;
 import org.springframework.cloud.dataflow.rest.resource.StepExecutionProgressInfoResource;
 import org.springframework.cloud.dataflow.rest.resource.StepExecutionResource;
 import org.springframework.cloud.dataflow.rest.resource.StreamDefinitionResource;
 import org.springframework.cloud.dataflow.rest.resource.StreamDeploymentResource;
-import org.springframework.cloud.dataflow.rest.resource.TaskDefinitionResource;
-import org.springframework.cloud.dataflow.rest.resource.TaskExecutionResource;
 import org.springframework.cloud.dataflow.server.config.features.FeaturesProperties;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
@@ -91,24 +87,6 @@ public class RootController {
 			resourceSupport.add(entityLinks.linkToCollectionResource(AppStatusResource.class).withRel("runtime/apps"));
 			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkForSingleResource(AppStatusResource.class, "{appId}").withRel("runtime/apps/app")));
 			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkFor(AppInstanceStatusResource.class, UriComponents.UriTemplateVariables.SKIP_VALUE).withRel("runtime/apps/instances")));
-		}
-		if (featuresProperties.isTasksEnabled()) {
-			resourceSupport.add(entityLinks.linkToCollectionResource(TaskDefinitionResource.class).withRel("tasks/definitions"));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkToSingleResource(TaskDefinitionResource.class, "{name}").withRel("tasks/definitions/definition")));
-			resourceSupport.add(entityLinks.linkToCollectionResource(TaskExecutionResource.class).withRel("tasks/executions"));
-			String taskTemplated = entityLinks.linkToCollectionResource(TaskExecutionResource.class).getHref() + "{?name}";
-			resourceSupport.add(new Link(taskTemplated).withRel("tasks/executions/name"));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkToSingleResource(TaskExecutionResource.class, "{id}").withRel("tasks/executions/execution")));
-			resourceSupport.add(entityLinks.linkToCollectionResource(JobExecutionResource.class).withRel("jobs/executions"));
-			taskTemplated = entityLinks.linkToCollectionResource(JobExecutionResource.class).getHref() + "{?name}";
-			resourceSupport.add(new Link(taskTemplated).withRel("jobs/executions/name"));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkToSingleResource(JobExecutionResource.class, "{id}").withRel("jobs/executions/execution")));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkFor(StepExecutionResource.class, "{jobExecutionId}").withRel("jobs/executions/execution/steps")));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkFor(StepExecutionResource.class, "{jobExecutionId}").slash("{stepId}").withRel("jobs/executions/execution/steps/step")));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkFor(StepExecutionProgressInfoResource.class, "{jobExecutionId}").slash("{stepId}").slash("progress").withRel("jobs/executions/execution/steps/step/progress")));
-			taskTemplated = entityLinks.linkToCollectionResource(JobInstanceResource.class).getHref() + "{?name}";
-			resourceSupport.add(new Link(taskTemplated).withRel("jobs/instances/name"));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkToSingleResource(JobInstanceResource.class, "{id}").withRel("jobs/instances/instance")));
 		}
 		if (featuresProperties.isAnalyticsEnabled()) {
 			resourceSupport.add(entityLinks.linkToCollectionResource(CounterResource.class).withRel("counters"));
