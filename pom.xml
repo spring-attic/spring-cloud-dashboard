@@ -57,7 +57,6 @@
 		<module>spring-cloud-dataflow-rest-client</module>
 		<module>spring-cloud-dataflow-shell</module>
 		<module>spring-cloud-dataflow-shell-core</module>
-		<module>spring-cloud-dataflow-docs</module>
 		<module>spring-cloud-dataflow-completion</module>
 		<module>spring-cloud-dataflow-dependencies</module>
 		<module>spring-cloud-starter-dataflow-server-local</module>
