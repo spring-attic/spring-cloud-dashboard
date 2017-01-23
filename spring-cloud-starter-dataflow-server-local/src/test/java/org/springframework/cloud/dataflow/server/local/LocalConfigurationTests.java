@@ -74,7 +74,6 @@ public class LocalConfigurationTests {
 		context = app.run(new String[] { "--server.port=0",
 				"--" + FeaturesProperties.FEATURES_PREFIX + "." + FeaturesProperties.STREAMS_ENABLED + "=false"});
 		assertNotNull(context.getBean(DeploymentIdRepository.class));
-		assertNotNull(context.getBean(FieldValueCounterRepository.class));
 		try {
 			context.getBean(StreamDefinitionRepository.class);
 			fail("Stream features should have been disabled.");
