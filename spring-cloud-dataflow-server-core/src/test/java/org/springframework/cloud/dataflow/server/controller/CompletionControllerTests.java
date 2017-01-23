@@ -87,24 +87,4 @@ public class CompletionControllerTests {
 				.accept(MediaType.APPLICATION_JSON)).andDo(print())
 				.andExpect(status().isOk());
 	}
-
-	@Test
-	public void testNegativeDetailLevelFailureForTaskCompletion() throws Exception {
-		mockMvc.perform(get("/completions/task")
-				.param("start", "abc")
-				.param("detailLevel", "-123")
-				.accept(MediaType.APPLICATION_JSON)).andDo(print())
-				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$[0].message", is("The provided detail level must be greater than zero.")));
-	}
-
-	@Test
-	public void testPositiveDetailLevelForTaskCompletion() throws Exception {
-		mockMvc.perform(get("/completions/task")
-				.param("start", "abc")
-				.param("detailLevel", "2")
-				.accept(MediaType.APPLICATION_JSON)).andDo(print())
-				.andExpect(status().isOk());
-	}
-
 }
