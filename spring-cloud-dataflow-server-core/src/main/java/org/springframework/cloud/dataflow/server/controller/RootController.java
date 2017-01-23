@@ -24,8 +24,6 @@ import org.springframework.cloud.dataflow.rest.resource.AppInstanceStatusResourc
 import org.springframework.cloud.dataflow.rest.resource.AppRegistrationResource;
 import org.springframework.cloud.dataflow.rest.resource.AppStatusResource;
 import org.springframework.cloud.dataflow.rest.resource.CompletionProposalsResource;
-import org.springframework.cloud.dataflow.rest.resource.StreamDefinitionResource;
-import org.springframework.cloud.dataflow.rest.resource.StreamDeploymentResource;
 import org.springframework.cloud.dataflow.server.config.features.FeaturesProperties;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
@@ -74,15 +72,6 @@ public class RootController {
 	public ResourceSupport info() {
 		ResourceSupport resourceSupport = new ResourceSupport();
 		resourceSupport.add(new Link(dashboard(""), "dashboard"));
-		if (featuresProperties.isStreamsEnabled()) {
-			resourceSupport.add(entityLinks.linkToCollectionResource(StreamDefinitionResource.class).withRel("streams/definitions"));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkToSingleResource(StreamDefinitionResource.class, "{name}").withRel("streams/definitions/definition")));
-			resourceSupport.add(entityLinks.linkToCollectionResource(StreamDeploymentResource.class).withRel("streams/deployments"));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkToSingleResource(StreamDeploymentResource.class, "{name}").withRel("streams/deployments/deployment")));
-			resourceSupport.add(entityLinks.linkToCollectionResource(AppStatusResource.class).withRel("runtime/apps"));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkForSingleResource(AppStatusResource.class, "{appId}").withRel("runtime/apps/app")));
-			resourceSupport.add(unescapeTemplateVariables(entityLinks.linkFor(AppInstanceStatusResource.class, UriComponents.UriTemplateVariables.SKIP_VALUE).withRel("runtime/apps/instances")));
-		}
 		resourceSupport.add(entityLinks.linkToCollectionResource(AppRegistrationResource.class).withRel("apps"));
 		String completionStreamTemplated = entityLinks.linkFor(CompletionProposalsResource.class).withSelfRel().getHref() + ("/stream{?start,detailLevel}");
 		resourceSupport.add(new Link(completionStreamTemplated).withRel("completions/stream"));

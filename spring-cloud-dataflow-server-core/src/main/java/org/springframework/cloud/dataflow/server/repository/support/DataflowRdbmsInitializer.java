@@ -104,20 +104,6 @@ public final class DataflowRdbmsInitializer implements InitializingBean {
 			logger.info(String.format("Adding dataflow schema %s for %s database", commonSchemaLocation,
 					platform));
 			populator.addScript(resourceLoader.getResource(commonSchemaLocation));
-			if (featuresProperties.isStreamsEnabled()) {
-				String streamsSchemaLocation = schemaLocation;
-				streamsSchemaLocation = streamsSchemaLocation.replace("@@suffix@@", STREAMS_SCHEMA_SUFFIX);
-				logger.info(String.format("Adding dataflow schema %s for %s database", streamsSchemaLocation,
-						platform));
-				populator.addScript(resourceLoader.getResource(streamsSchemaLocation));
-			}
-			if (featuresProperties.isStreamsEnabled()) {
-				String deploymentSchemaLocation = schemaLocation;
-				deploymentSchemaLocation = deploymentSchemaLocation.replace("@@suffix@@", DEPLOYMENT_SCHEMA_SUFFIX);
-				logger.info(String.format("Adding dataflow schema %s for %s database", deploymentSchemaLocation,
-						platform));
-				populator.addScript(resourceLoader.getResource(deploymentSchemaLocation));
-			}
 			populator.setContinueOnError(true);
 			logger.debug(String.format("Initializing dataflow schema for %s database", platform));
 			DatabasePopulatorUtils.execute(populator, dataSource);

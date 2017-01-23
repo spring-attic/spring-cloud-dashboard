@@ -31,7 +31,6 @@ import org.springframework.cloud.dataflow.server.config.features.FeaturesPropert
 import org.springframework.cloud.dataflow.server.local.dataflowapp.LocalTestDataFlowServer;
 import org.springframework.cloud.dataflow.server.local.nodataflowapp.LocalTestNoDataFlowServer;
 import org.springframework.cloud.dataflow.server.repository.DeploymentIdRepository;
-import org.springframework.cloud.dataflow.server.repository.StreamDefinitionRepository;
 import org.springframework.cloud.deployer.spi.local.LocalAppDeployer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.SocketUtils;
@@ -65,25 +64,6 @@ public class LocalConfigurationTests {
 		assertThat(context.containsBean(APP_DEPLOYER_BEAN_NAME), is(true));
 		assertThat(context.getBean(APP_DEPLOYER_BEAN_NAME), instanceOf(LocalAppDeployer.class));
 		assertNotNull(context.getBean(AppRegistry.class));
-	}
-
-	@Test
-	public void testConfigWithStreamsDisabled() {
-		SpringApplication app = new SpringApplication(LocalTestDataFlowServer.class);
-		context = app.run(new String[] { "--server.port=0",
-				"--" + FeaturesProperties.FEATURES_PREFIX + "." + FeaturesProperties.STREAMS_ENABLED + "=false"});
-		try {
-			context.getBean(DeploymentIdRepository.class);
-			fail("Stream features should have been disabled.");
-		}
-		catch (NoSuchBeanDefinitionException e) {
-		}
-		try {
-			context.getBean(StreamDefinitionRepository.class);
-			fail("Stream features should have been disabled.");
-		}
-		catch (NoSuchBeanDefinitionException e) {
-		}
 	}
 
 	@Test

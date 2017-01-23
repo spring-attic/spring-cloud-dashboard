@@ -21,13 +21,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.springframework.cloud.dataflow.core.StreamAppDefinition;
-import org.springframework.cloud.dataflow.core.StreamDefinition;
 import org.springframework.cloud.dataflow.rest.resource.AppInstanceStatusResource;
 import org.springframework.cloud.dataflow.rest.resource.AppStatusResource;
 import org.springframework.cloud.dataflow.server.repository.DeploymentIdRepository;
-import org.springframework.cloud.dataflow.server.repository.DeploymentKey;
-import org.springframework.cloud.dataflow.server.repository.StreamDefinitionRepository;
 import org.springframework.cloud.deployer.spi.app.AppDeployer;
 import org.springframework.cloud.deployer.spi.app.AppInstanceStatus;
 import org.springframework.cloud.deployer.spi.app.AppStatus;
@@ -65,11 +61,6 @@ public class RuntimeAppsController {
 	};
 
 	/**
-	 * The repository this controller will use for stream CRUD operations.
-	 */
-	private final StreamDefinitionRepository streamDefinitionRepository;
-
-	/**
 	 * The repository this controller will use for deployment IDs.
 	 */
 	private final DeploymentIdRepository deploymentIdRepository;
@@ -88,12 +79,10 @@ public class RuntimeAppsController {
 	 * @param deploymentIdRepository the repository this controller will use for deployment IDs
 	 * @param appDeployer the deployer this controller will use to deploy stream apps
 	 */
-	public RuntimeAppsController(StreamDefinitionRepository streamDefinitionRepository, DeploymentIdRepository deploymentIdRepository,
+	public RuntimeAppsController(DeploymentIdRepository deploymentIdRepository,
 			AppDeployer appDeployer) {
-		Assert.notNull(streamDefinitionRepository, "StreamDefinitionRepository must not be null");
 		Assert.notNull(deploymentIdRepository, "DeploymentIdRepository must not be null");
 		Assert.notNull(appDeployer, "AppDeployer must not be null");
-		this.streamDefinitionRepository = streamDefinitionRepository;
 		this.deploymentIdRepository = deploymentIdRepository;
 		this.appDeployer = appDeployer;
 	}
@@ -101,15 +90,6 @@ public class RuntimeAppsController {
 	@RequestMapping
 	public PagedResources<AppStatusResource> list(PagedResourcesAssembler<AppStatus> assembler) {
 		List<AppStatus> values = new ArrayList<>();
-		for (StreamDefinition streamDefinition : this.streamDefinitionRepository.findAll()) {
-			for (StreamAppDefinition streamAppDefinition : streamDefinition.getAppDefinitions()) {
-				String key = DeploymentKey.forStreamAppDefinition(streamAppDefinition);
-				String id = this.deploymentIdRepository.findOne(key);
-				if (id != null) {
-					values.add(appDeployer.status(id));
-				}
-			}
-		}
 		Collections.sort(values, new Comparator<AppStatus>() {
 			@Override
 			public int compare(AppStatus o1, AppStatus o2) {

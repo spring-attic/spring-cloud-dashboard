@@ -27,15 +27,4 @@ public class FeaturesProperties {
 
 	public static final String FEATURES_PREFIX = "spring.cloud.dataflow.features";
 
-	public static final String STREAMS_ENABLED = "streams-enabled";
-
-	private boolean streamsEnabled = true;
-
-	public boolean isStreamsEnabled() {
-		return this.streamsEnabled;
-	}
-
-	public void setStreamsEnabled(boolean streamsEnabled) {
-		this.streamsEnabled = streamsEnabled;
-	}
 }

@@ -26,20 +26,14 @@ import java.util.Map;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.dataflow.completion.CompletionConfiguration;
-import org.springframework.cloud.dataflow.completion.StreamCompletionProvider;
 import org.springframework.cloud.dataflow.configuration.metadata.ApplicationConfigurationMetadataResolver;
 import org.springframework.cloud.dataflow.registry.AppRegistry;
 import org.springframework.cloud.dataflow.server.config.apps.CommonApplicationProperties;
 import org.springframework.cloud.dataflow.server.controller.AppRegistryController;
 import org.springframework.cloud.dataflow.server.controller.CompletionController;
 import org.springframework.cloud.dataflow.server.controller.RestControllerAdvice;
-import org.springframework.cloud.dataflow.server.controller.StreamDefinitionController;
-import org.springframework.cloud.dataflow.server.controller.StreamDeploymentController;
 import org.springframework.cloud.dataflow.server.registry.DataFlowUriRegistryPopulator;
 import org.springframework.cloud.dataflow.server.repository.DeploymentIdRepository;
-import org.springframework.cloud.dataflow.server.repository.InMemoryDeploymentIdRepository;
-import org.springframework.cloud.dataflow.server.repository.InMemoryStreamDefinitionRepository;
-import org.springframework.cloud.dataflow.server.repository.StreamDefinitionRepository;
 import org.springframework.cloud.deployer.resource.maven.MavenProperties;
 import org.springframework.cloud.deployer.resource.maven.MavenResourceLoader;
 import org.springframework.cloud.deployer.resource.registry.InMemoryUriRegistry;
@@ -93,29 +87,13 @@ public class TestDependencies extends WebMvcConfigurationSupport {
 	}
 
 	@Bean
-	public StreamDeploymentController streamDeploymentController(StreamDefinitionRepository repository,
-			DeploymentIdRepository deploymentIdRepository, AppRegistry registry,
-			ApplicationConfigurationMetadataResolver metadataResolver,
-			CommonApplicationProperties applicationProperties) {
-		return new StreamDeploymentController(repository, deploymentIdRepository, registry, appDeployer(),
-				metadataResolver, applicationProperties);
-	}
-
-	@Bean
-	public StreamDefinitionController streamDefinitionController(StreamDefinitionRepository repository,
-			DeploymentIdRepository deploymentIdRepository, StreamDeploymentController deploymentController) {
-		return new StreamDefinitionController(repository, deploymentIdRepository, deploymentController, appDeployer(),
-				appRegistry());
-	}
-
-	@Bean
 	public MethodValidationPostProcessor methodValidationPostProcessor() {
 		return new MethodValidationPostProcessor();
 	}
 
 	@Bean
-	public CompletionController completionController(StreamCompletionProvider streamCompletionProvider) {
-		return new CompletionController(streamCompletionProvider);
+	public CompletionController completionController() {
+		return new CompletionController();
 	}
 
 	@Bean
@@ -156,16 +134,5 @@ public class TestDependencies extends WebMvcConfigurationSupport {
 	@Bean
 	public TaskExplorer taskExplorer() {
 		return mock(TaskExplorer.class);
-	}
-
-	@Bean
-	public StreamDefinitionRepository streamDefinitionRepository() {
-		return new InMemoryStreamDefinitionRepository();
-	}
-
-	@Bean
-	@ConditionalOnMissingBean
-	public DeploymentIdRepository deploymentIdRepository() {
-		return new InMemoryDeploymentIdRepository();
 	}
 }

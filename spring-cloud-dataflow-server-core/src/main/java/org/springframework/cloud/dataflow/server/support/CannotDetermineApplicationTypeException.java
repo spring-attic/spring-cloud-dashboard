@@ -16,8 +16,6 @@
 package org.springframework.cloud.dataflow.server.support;
 
 import org.springframework.cloud.dataflow.core.ApplicationType;
-import org.springframework.cloud.dataflow.core.StreamAppDefinition;
-import org.springframework.cloud.dataflow.server.DataFlowServerUtil;
 
 /**
  * Exception is thrown by {@link DataFlowServerUtil} to indicate that

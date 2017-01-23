@@ -30,7 +30,6 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.dataflow.completion.CompletionConfiguration;
-import org.springframework.cloud.dataflow.completion.StreamCompletionProvider;
 import org.springframework.cloud.dataflow.configuration.metadata.ApplicationConfigurationMetadataResolver;
 import org.springframework.cloud.dataflow.registry.AppRegistry;
 import org.springframework.cloud.dataflow.registry.RdbmsUriRegistry;
@@ -43,13 +42,10 @@ import org.springframework.cloud.dataflow.server.controller.RestControllerAdvice
 import org.springframework.cloud.dataflow.server.controller.RootController;
 import org.springframework.cloud.dataflow.server.controller.RuntimeAppsController;
 import org.springframework.cloud.dataflow.server.controller.RuntimeAppsController.AppInstanceController;
-import org.springframework.cloud.dataflow.server.controller.StreamDefinitionController;
-import org.springframework.cloud.dataflow.server.controller.StreamDeploymentController;
 import org.springframework.cloud.dataflow.server.controller.UiController;
 import org.springframework.cloud.dataflow.server.controller.security.LoginController;
 import org.springframework.cloud.dataflow.server.controller.security.SecurityController;
 import org.springframework.cloud.dataflow.server.repository.DeploymentIdRepository;
-import org.springframework.cloud.dataflow.server.repository.StreamDefinitionRepository;
 import org.springframework.cloud.deployer.resource.maven.MavenProperties;
 import org.springframework.cloud.deployer.resource.maven.MavenResourceLoader;
 import org.springframework.cloud.deployer.resource.registry.UriRegistry;
@@ -100,30 +96,6 @@ public class DataFlowControllerAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnBean(StreamDefinitionRepository.class)
-	public StreamDefinitionController streamDefinitionController(StreamDefinitionRepository repository,
-			DeploymentIdRepository deploymentIdRepository, StreamDeploymentController deploymentController,
-			AppDeployer deployer, AppRegistry appRegistry) {
-		return new StreamDefinitionController(repository, deploymentIdRepository, deploymentController, deployer,
-				appRegistry);
-	}
-
-	@Bean
-	@ConditionalOnBean(StreamDefinitionRepository.class)
-	public StreamDeploymentController streamDeploymentController(StreamDefinitionRepository repository,
-			DeploymentIdRepository deploymentIdRepository, AppRegistry registry, AppDeployer deployer,
-			ApplicationConfigurationMetadataResolver metadataResolver, CommonApplicationProperties appsProperties) {
-		return new StreamDeploymentController(repository, deploymentIdRepository, registry, deployer, metadataResolver, appsProperties);
-	}
-
-	@Bean
-	@ConditionalOnBean(StreamDefinitionRepository.class)
-	public RuntimeAppsController runtimeAppsController(StreamDefinitionRepository repository,
-			DeploymentIdRepository deploymentIdRepository, AppDeployer appDeployer) {
-		return new RuntimeAppsController(repository, deploymentIdRepository, appDeployer);
-	}
-
-	@Bean
 	public MavenResourceLoader mavenResourceLoader(MavenProperties properties) {
 		return new MavenResourceLoader(properties);
 	}
@@ -137,8 +109,8 @@ public class DataFlowControllerAutoConfiguration {
 	}
 
 	@Bean
-	public CompletionController completionController(StreamCompletionProvider completionProvider) {
-		return new CompletionController(completionProvider);
+	public CompletionController completionController() {
+		return new CompletionController();
 	}
 
 	@Bean

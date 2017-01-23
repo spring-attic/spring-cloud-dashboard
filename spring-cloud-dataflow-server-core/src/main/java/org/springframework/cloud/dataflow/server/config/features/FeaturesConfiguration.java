@@ -32,13 +32,10 @@ import org.springframework.context.annotation.Import;
  * @author Ilayaperumal Gopinathan
  */
 @Configuration
-@Import({ StreamConfiguration.class })
 public class FeaturesConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	@ConditionalOnExpression("#{'${" + FeaturesProperties.FEATURES_PREFIX + "."
-			+ FeaturesProperties.STREAMS_ENABLED + ":true}'.equalsIgnoreCase('true')}")
 	public DeploymentIdRepository deploymentIdRepository(DataSource dataSource) {
 		return new RdbmsDeploymentIdRepository(dataSource);
 	}

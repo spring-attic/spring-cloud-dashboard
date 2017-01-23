@@ -34,7 +34,6 @@ public class FeaturesController {
 	@ResponseStatus(HttpStatus.OK)
 	public FeaturesInfoResource getSecurityInfo() {
 		FeaturesInfoResource featuresInfoResource = new FeaturesInfoResource();
-		featuresInfoResource.setStreamsEnabled(featuresProperties.isStreamsEnabled());
 		return featuresInfoResource;
 	}
 }

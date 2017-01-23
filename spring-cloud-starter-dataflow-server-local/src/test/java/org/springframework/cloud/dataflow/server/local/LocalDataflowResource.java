@@ -57,8 +57,7 @@ public class LocalDataflowResource extends ExternalResource {
 		}
 
 		app = new SpringApplication(LocalTestDataFlowServer.class);
-		configurableApplicationContext = (WebApplicationContext) app.run(new String[]{"--server.port=0",
-				"--" + FeaturesProperties.FEATURES_PREFIX + "." + FeaturesProperties.STREAMS_ENABLED + "=true"});
+		configurableApplicationContext = (WebApplicationContext) app.run(new String[]{"--server.port=0"});
 
 		Collection<Filter> filters = configurableApplicationContext.getBeansOfType(Filter.class).values();
 		mockMvc = MockMvcBuilders.webAppContextSetup(configurableApplicationContext)
