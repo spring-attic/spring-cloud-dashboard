@@ -22,7 +22,6 @@ import javax.validation.constraints.Min;
 
 import org.springframework.cloud.dataflow.completion.CompletionProposal;
 import org.springframework.cloud.dataflow.completion.StreamCompletionProvider;
-import org.springframework.cloud.dataflow.completion.TaskCompletionProvider;
 import org.springframework.cloud.dataflow.rest.resource.CompletionProposalsResource;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
@@ -45,16 +44,13 @@ public class CompletionController {
 
 	private final StreamCompletionProvider completionProvider;
 
-	private final TaskCompletionProvider taskCompletionProvider;
-
 	private final Assembler assembler = new Assembler();
 
 	/**
-	 * Create a controller for the provided {@link StreamCompletionProvider} and {@link TaskCompletionProvider}.
+	 * Create a controller for the provided {@link StreamCompletionProvider}.
 	 */
-	public CompletionController(StreamCompletionProvider completionProvider, TaskCompletionProvider taskCompletionProvider) {
+	public CompletionController(StreamCompletionProvider completionProvider) {
 		this.completionProvider = completionProvider;
-		this.taskCompletionProvider = taskCompletionProvider;
 	}
 
 	/**
@@ -70,21 +66,6 @@ public class CompletionController {
 			@RequestParam(value = "detailLevel", defaultValue = "1")
 			@Min(value=1, message="The provided detail level must be greater than zero.") int detailLevel) {
 		return assembler.toResource(completionProvider.complete(start, detailLevel));
-	}
-
-	/**
-	 * Return a list of possible completions given a prefix string that the user has started typing.
-	 *
-	 * @param start the amount of text written so far
-	 * @param detailLevel the level of detail the user wants in completions, starting at 1.
-	 * Higher values request more detail, with values typically in the range [1..5]
-	 */
-	@RequestMapping(value = "/task")
-	public CompletionProposalsResource taskCompletions(
-			@RequestParam("start") String start,
-			@RequestParam(value = "detailLevel", defaultValue = "1")
-			@Min(value=1, message="The provided detail level must be greater than zero.") int detailLevel) {
-		return assembler.toResource(taskCompletionProvider.complete(start, detailLevel));
 	}
 
 	/**

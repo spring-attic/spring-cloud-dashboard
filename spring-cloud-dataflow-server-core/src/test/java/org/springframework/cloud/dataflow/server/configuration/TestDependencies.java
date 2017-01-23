@@ -27,7 +27,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.dataflow.completion.CompletionConfiguration;
 import org.springframework.cloud.dataflow.completion.StreamCompletionProvider;
-import org.springframework.cloud.dataflow.completion.TaskCompletionProvider;
 import org.springframework.cloud.dataflow.configuration.metadata.ApplicationConfigurationMetadataResolver;
 import org.springframework.cloud.dataflow.registry.AppRegistry;
 import org.springframework.cloud.dataflow.server.config.apps.CommonApplicationProperties;
@@ -115,8 +114,8 @@ public class TestDependencies extends WebMvcConfigurationSupport {
 	}
 
 	@Bean
-	public CompletionController completionController(StreamCompletionProvider streamCompletionProvider, TaskCompletionProvider taskCompletionProvider) {
-		return new CompletionController(streamCompletionProvider, taskCompletionProvider);
+	public CompletionController completionController(StreamCompletionProvider streamCompletionProvider) {
+		return new CompletionController(streamCompletionProvider);
 	}
 
 	@Bean
