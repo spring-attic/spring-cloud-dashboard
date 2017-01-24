@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration:\
-org.springframework.cloud.dataflow.configuration.metadata.ApplicationConfigurationMetadataResolverAutoConfiguration
+org.springframework.cloud.deployer.admin.configuration.metadata.ApplicationConfigurationMetadataResolverAutoConfiguration
