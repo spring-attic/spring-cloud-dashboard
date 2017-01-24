@@ -8,7 +8,7 @@
 		<relativePath />
 	</parent>
 	<artifactId>spring-cloud-deployer-admin-dependencies</artifactId>
-	<version>1.2.0.BUILD-SNAPSHOT</version>
+	<version>1.0.0.BUILD-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>spring-cloud-deployer-admin-dependencies</name>
 	<description>Spring Cloud Data Flow Dependencies BOM designed to support consumption of Spring Cloud Data Flow from the Spring Initializr.</description>
@@ -17,52 +17,52 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-deployer-admin-shell-core</artifactId>
-				<version>1.2.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.BUILD-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-deployer-admin-completion</artifactId>
-				<version>1.2.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.BUILD-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-deployer-admin-core</artifactId>
-				<version>1.2.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.BUILD-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-deployer-admin-rest-client</artifactId>
-				<version>1.2.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.BUILD-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-deployer-admin-configuration-metadata</artifactId>
-				<version>1.2.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.BUILD-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-deployer-admin-rest-resource</artifactId>
-				<version>1.2.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.BUILD-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-deployer-admin-registry</artifactId>
-				<version>1.2.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.BUILD-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-deployer-admin-server-core</artifactId>
-				<version>1.2.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.BUILD-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-deployer-admin-server-local</artifactId>
-				<version>1.2.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.BUILD-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-deployer-admin-server-local</artifactId>
-				<version>1.2.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.BUILD-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
