@@ -1,4 +1,4 @@
-== Spring Cloud Data Flow
+== Spring Cloud Deployer Admin
 
 === Building
 
