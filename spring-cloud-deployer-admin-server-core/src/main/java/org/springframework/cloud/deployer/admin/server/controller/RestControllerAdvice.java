@@ -23,16 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.batch.admin.service.NoSuchStepExecutionException;
-import org.springframework.batch.core.launch.JobExecutionNotRunningException;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.launch.NoSuchJobExecutionException;
 import org.springframework.batch.core.launch.NoSuchJobInstanceException;
 import org.springframework.boot.actuate.endpoint.mvc.MetricsMvcEndpoint;
 import org.springframework.cloud.deployer.admin.registry.support.NoSuchAppRegistrationException;
 import org.springframework.cloud.deployer.admin.server.controller.support.InvalidStreamDefinitionException;
-import org.springframework.cloud.deployer.admin.server.repository.DuplicateStreamDefinitionException;
 import org.springframework.cloud.deployer.admin.server.repository.DuplicateTaskException;
-import org.springframework.cloud.deployer.admin.server.repository.NoSuchStreamDefinitionException;
 import org.springframework.cloud.deployer.admin.server.repository.NoSuchTaskDefinitionException;
 import org.springframework.cloud.deployer.admin.server.repository.NoSuchTaskExecutionException;
 import org.springframework.hateoas.VndErrors;
@@ -76,10 +73,7 @@ public class RestControllerAdvice {
 	 */
 	@ExceptionHandler({
 			AppAlreadyRegisteredException.class,
-			DuplicateStreamDefinitionException.class,
-			DuplicateTaskException.class,
-			StreamAlreadyDeployedException.class,
-			StreamAlreadyDeployingException.class})
+			DuplicateTaskException.class})
 	@ResponseStatus(HttpStatus.CONFLICT)
 	@ResponseBody
 	public VndErrors onConflictException(Exception e) {
@@ -95,8 +89,7 @@ public class RestControllerAdvice {
 	 * Log the exception message at warn level and stack trace as trace level.
 	 * Return response status HttpStatus.NOT_FOUND
 	 */
-	@ExceptionHandler({NoSuchStreamDefinitionException.class,
-			NoSuchAppRegistrationException.class,
+	@ExceptionHandler({NoSuchAppRegistrationException.class,
 			NoSuchTaskDefinitionException.class,
 			NoSuchTaskExecutionException.class,
 			NoSuchJobExecutionException.class,
