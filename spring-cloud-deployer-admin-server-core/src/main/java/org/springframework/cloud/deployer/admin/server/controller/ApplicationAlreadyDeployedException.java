@@ -14,35 +14,18 @@
  * limitations under the License.
  */
 
-package org.springframework.cloud.deployer.admin.rest.client;
+package org.springframework.cloud.deployer.admin.server.controller;
 
 /**
- * Interface the REST clients implement to interact with spring-cloud-dataflow REST API.
+ * Thrown when a application is already deployed when the controller gets a request to deploy it.
  *
- * @author Ilayaperumal Gopinathan
- * @author Glenn Renfro
- * @author Mark Fisher
  * @author Janne Valkealahti
  */
-public interface DataFlowOperations {
+public class ApplicationAlreadyDeployedException extends RuntimeException {
 
-	/**
-	 * Application registry related operations.
-	 */
-	AppRegistryOperations appRegistryOperations();
+	private static final long serialVersionUID = 1206240149790331171L;
 
-	/**
-	 * DSL Completion related operations.
-	 */
-	CompletionOperations completionOperations();
-
-	/**
-	 * Runtime related opertations.
-	 */
-	RuntimeOperations runtimeOperations();
-
-	/**
-	 * Application related operations.
-	 */
-	ApplicationOperations applicationOperations();
+	public ApplicationAlreadyDeployedException(String name) {
+		super(String.format("Application '%s' is already deployed", name));
+	}
 }

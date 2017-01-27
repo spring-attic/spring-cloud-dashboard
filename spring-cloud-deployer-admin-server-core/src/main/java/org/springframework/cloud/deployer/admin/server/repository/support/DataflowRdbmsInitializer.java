@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2016-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,8 @@ public final class DataflowRdbmsInitializer implements InitializingBean {
 	private static final String DEFAULT_SCHEMA_LOCATION = "classpath:schema-@@platform@@-@@suffix@@.sql";
 
 	private static final String COMMON_SCHEMA_SUFFIX = "common";
+
+	private static final String APPLICATIONS_SCHEMA_SUFFIX = "applications";
 
 	private static final String STREAMS_SCHEMA_SUFFIX = "streams";
 
@@ -104,6 +106,19 @@ public final class DataflowRdbmsInitializer implements InitializingBean {
 			logger.info(String.format("Adding dataflow schema %s for %s database", commonSchemaLocation,
 					platform));
 			populator.addScript(resourceLoader.getResource(commonSchemaLocation));
+
+			String applicationssSchemaLocation = schemaLocation;
+			applicationssSchemaLocation = applicationssSchemaLocation.replace("@@suffix@@", APPLICATIONS_SCHEMA_SUFFIX);
+			logger.info(String.format("Adding dataflow schema %s for %s database", applicationssSchemaLocation,
+					platform));
+			populator.addScript(resourceLoader.getResource(applicationssSchemaLocation));
+
+			String deploymentSchemaLocation = schemaLocation;
+			deploymentSchemaLocation = deploymentSchemaLocation.replace("@@suffix@@", DEPLOYMENT_SCHEMA_SUFFIX);
+			logger.info(String.format("Adding dataflow schema %s for %s database", deploymentSchemaLocation,
+					platform));
+			populator.addScript(resourceLoader.getResource(deploymentSchemaLocation));
+
 			populator.setContinueOnError(true);
 			logger.debug(String.format("Initializing dataflow schema for %s database", platform));
 			DatabasePopulatorUtils.execute(populator, dataSource);

@@ -69,6 +69,11 @@ public class DataFlowTemplate implements DataFlowOperations {
 	private final RuntimeOperations runtimeOperations;
 
 	/**
+	 * Rest client for application operations.
+	 */
+	private final ApplicationOperations applicationOperations;
+
+	/**
 	 * Setup a {@link DataFlowTemplate} using the provided baseURI. Will create a {@link RestTemplate} implicitly with
 	 * the required set of Jackson MixIns. For more information, please see {@link #prepareRestTemplate(RestTemplate)}.
 	 *
@@ -108,6 +113,12 @@ public class DataFlowTemplate implements DataFlowOperations {
 		this.completionOperations = new CompletionTemplate(restTemplate,
 			resourceSupport.getLink("completions/stream"),
 			resourceSupport.getLink("completions/task"));
+		if (resourceSupport.hasLink(ApplicationTemplate.DEFINITIONS_REL)) {
+			this.applicationOperations = new ApplicationTemplate(restTemplate, resourceSupport);
+		}
+		else {
+			this.applicationOperations = null;
+		}
 	}
 
 	public Link getLink(ResourceSupport resourceSupport, String rel) {
@@ -132,6 +143,11 @@ public class DataFlowTemplate implements DataFlowOperations {
 	@Override
 	public RuntimeOperations runtimeOperations() {
 		return runtimeOperations;
+	}
+
+	@Override
+	public ApplicationOperations applicationOperations() {
+		return applicationOperations;
 	}
 
 	/**

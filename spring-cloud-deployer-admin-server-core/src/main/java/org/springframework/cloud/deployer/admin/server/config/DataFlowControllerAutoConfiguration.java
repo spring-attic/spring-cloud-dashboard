@@ -36,6 +36,8 @@ import org.springframework.cloud.deployer.admin.registry.RdbmsUriRegistry;
 import org.springframework.cloud.deployer.admin.server.config.apps.CommonApplicationProperties;
 import org.springframework.cloud.deployer.admin.server.config.features.FeaturesProperties;
 import org.springframework.cloud.deployer.admin.server.controller.AppRegistryController;
+import org.springframework.cloud.deployer.admin.server.controller.ApplicationDefinitionController;
+import org.springframework.cloud.deployer.admin.server.controller.ApplicationDeploymentController;
 import org.springframework.cloud.deployer.admin.server.controller.CompletionController;
 import org.springframework.cloud.deployer.admin.server.controller.FeaturesController;
 import org.springframework.cloud.deployer.admin.server.controller.RestControllerAdvice;
@@ -45,6 +47,7 @@ import org.springframework.cloud.deployer.admin.server.controller.UiController;
 import org.springframework.cloud.deployer.admin.server.controller.RuntimeAppsController.AppInstanceController;
 import org.springframework.cloud.deployer.admin.server.controller.security.LoginController;
 import org.springframework.cloud.deployer.admin.server.controller.security.SecurityController;
+import org.springframework.cloud.deployer.admin.server.repository.ApplicationDefinitionRepository;
 import org.springframework.cloud.deployer.admin.server.repository.DeploymentIdRepository;
 import org.springframework.cloud.deployer.resource.maven.MavenProperties;
 import org.springframework.cloud.deployer.resource.maven.MavenResourceLoader;
@@ -116,6 +119,22 @@ public class DataFlowControllerAutoConfiguration {
 	@Bean
 	public AppRegistryController appRegistryController(AppRegistry appRegistry, ApplicationConfigurationMetadataResolver metadataResolver) {
 		return new AppRegistryController(appRegistry, metadataResolver);
+	}
+
+	@Bean
+	@ConditionalOnBean(ApplicationDefinitionRepository.class)
+	public ApplicationDefinitionController applicationDefinitionController(ApplicationDefinitionRepository repository,
+			DeploymentIdRepository deploymentIdRepository, ApplicationDeploymentController deploymentController,
+			AppDeployer deployer, AppRegistry appRegistry) {
+		return new ApplicationDefinitionController(repository, deploymentIdRepository, deploymentController, deployer, appRegistry);
+	}
+
+	@Bean
+	@ConditionalOnBean(ApplicationDefinitionRepository.class)
+	public ApplicationDeploymentController applicationDeploymentController(ApplicationDefinitionRepository repository,
+			DeploymentIdRepository deploymentIdRepository, AppDeployer deployer, AppRegistry appRegistry,
+			ApplicationConfigurationMetadataResolver metadataResolver, CommonApplicationProperties appsProperties) {
+		return new ApplicationDeploymentController(repository, deploymentIdRepository, deployer, appRegistry, metadataResolver, appsProperties);
 	}
 
 	@Bean

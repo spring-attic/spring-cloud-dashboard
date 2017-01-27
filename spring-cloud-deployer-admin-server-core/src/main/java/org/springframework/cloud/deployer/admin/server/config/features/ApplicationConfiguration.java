@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.cloud.deployer.admin.server.config.features;
 
 import javax.sql.DataSource;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.cloud.deployer.admin.server.repository.DeploymentIdRepository;
-import org.springframework.cloud.deployer.admin.server.repository.RdbmsDeploymentIdRepository;
+import org.springframework.cloud.deployer.admin.server.repository.ApplicationDefinitionRepository;
+import org.springframework.cloud.deployer.admin.server.repository.RdbmsApplicationDefinitionRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
-/**
- * Configuration class that imports analytics, stream and task configuration classes. Also
- * holds any common beans on the above configuration classes.
- *
- * @author Ilayaperumal Gopinathan
- */
 @Configuration
-@Import({ ApplicationConfiguration.class })
-public class FeaturesConfiguration {
+public class ApplicationConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public DeploymentIdRepository deploymentIdRepository(DataSource dataSource) {
-		return new RdbmsDeploymentIdRepository(dataSource);
+	public ApplicationDefinitionRepository applicationDefinitionRepository(DataSource dataSource) {
+		return new RdbmsApplicationDefinitionRepository(dataSource);
 	}
 }

@@ -23,6 +23,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.deployer.admin.rest.resource.AppInstanceStatusResource;
 import org.springframework.cloud.deployer.admin.rest.resource.AppRegistrationResource;
 import org.springframework.cloud.deployer.admin.rest.resource.AppStatusResource;
+import org.springframework.cloud.deployer.admin.rest.resource.ApplicationDefinitionResource;
+import org.springframework.cloud.deployer.admin.rest.resource.ApplicationDeploymentResource;
 import org.springframework.cloud.deployer.admin.rest.resource.CompletionProposalsResource;
 import org.springframework.cloud.deployer.admin.server.config.features.FeaturesProperties;
 import org.springframework.hateoas.EntityLinks;
@@ -73,6 +75,10 @@ public class RootController {
 		ResourceSupport resourceSupport = new ResourceSupport();
 		resourceSupport.add(new Link(dashboard(""), "dashboard"));
 		resourceSupport.add(entityLinks.linkToCollectionResource(AppRegistrationResource.class).withRel("apps"));
+		resourceSupport.add(entityLinks.linkToCollectionResource(ApplicationDefinitionResource.class).withRel("applications/definitions"));
+		resourceSupport.add(unescapeTemplateVariables(entityLinks.linkToSingleResource(ApplicationDefinitionResource.class, "{name}").withRel("applications/definitions/definition")));
+		resourceSupport.add(entityLinks.linkToCollectionResource(ApplicationDeploymentResource.class).withRel("applications/deployments"));
+		resourceSupport.add(unescapeTemplateVariables(entityLinks.linkToSingleResource(ApplicationDeploymentResource.class, "{name}").withRel("applications/deployments/deployment")));
 		String completionStreamTemplated = entityLinks.linkFor(CompletionProposalsResource.class).withSelfRel().getHref() + ("/stream{?start,detailLevel}");
 		resourceSupport.add(new Link(completionStreamTemplated).withRel("completions/stream"));
 		String completionTaskTemplated = entityLinks.linkFor(CompletionProposalsResource.class).withSelfRel().getHref() + ("/task{?start,detailLevel}");
