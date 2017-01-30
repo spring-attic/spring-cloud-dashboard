@@ -101,7 +101,7 @@ public class ApplicationCommands implements CommandMarker {
 	}
 
 	@CliCommand(value = DEPLOY_APPLICATION, help = "Deploy a previously created application")
-	public String deployStream(
+	public String deployApplication(
 			@CliOption(key = { "", "name" }, help = "the name of the application to deploy", mandatory = true) String name,
 			@CliOption(key = { PROPERTIES_OPTION }, help = "the properties for this deployment", mandatory = false) String properties,
 			@CliOption(key = { PROPERTIES_FILE_OPTION }, help = "the properties for this deployment (as a File)", mandatory = false) File propertiesFile
@@ -140,7 +140,7 @@ public class ApplicationCommands implements CommandMarker {
 	}
 
 	@CliCommand(value = UNDEPLOY_APPLICATION, help = "Un-deploy a previously deployed application")
-	public String undeployStream(
+	public String undeployApplication(
 			@CliOption(key = { "", "name" }, help = "the name of the application to un-deploy", mandatory = true) String name
 			) {
 		applicationOperations().undeploy(name);
@@ -148,7 +148,7 @@ public class ApplicationCommands implements CommandMarker {
 	}
 
 	@CliCommand(value = DESTROY_APPLICATION, help = "Destroy an existing application")
-	public String destroyStream(
+	public String destroyApplication(
 			@CliOption(key = { "", "name" }, help = "the name of the application to destroy", mandatory = true) String name) {
 		applicationOperations().destroy(name);
 		return String.format("Destroyed application '%s'", name);
@@ -168,7 +168,7 @@ public class ApplicationCommands implements CommandMarker {
 	}
 
 	@CliCommand(value = DESTROY_APPLICATION_ALL, help = "Destroy all existing applications")
-	public String destroyAllStreams(
+	public String destroyAllApplications(
 			@CliOption(key = "force", help = "bypass confirmation prompt", unspecifiedDefaultValue = "false", specifiedDefaultValue = "true") boolean force) {
 		if (force || "y".equalsIgnoreCase(userInput.promptWithOptions("Really destroy all applications?", "n", "y", "n"))) {
 			applicationOperations().destroyAll();
