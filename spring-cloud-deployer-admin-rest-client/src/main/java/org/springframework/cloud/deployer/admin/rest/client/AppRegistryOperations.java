@@ -18,7 +18,6 @@ package org.springframework.cloud.deployer.admin.rest.client;
 
 import java.util.Properties;
 
-import org.springframework.cloud.deployer.admin.core.ApplicationType;
 import org.springframework.cloud.deployer.admin.rest.resource.AppRegistrationResource;
 import org.springframework.cloud.deployer.admin.rest.resource.DetailedAppRegistrationResource;
 import org.springframework.hateoas.PagedResources;
@@ -47,7 +46,7 @@ public interface AppRegistryOperations {
 	 * @param type application type for which to return a list of registrations
 	 * @return list of all application registrations for the given application type
 	 */
-	PagedResources<AppRegistrationResource> list(ApplicationType type);
+	PagedResources<AppRegistrationResource> list(String type);
 
 	/**
 	 * Retrieve information about an application registration.
@@ -57,7 +56,7 @@ public interface AppRegistryOperations {
 	 *
 	 * @return detailed information about an application registration
 	 */
-	DetailedAppRegistrationResource info(String name, ApplicationType type);
+	DetailedAppRegistrationResource info(String name, String type);
 
 	/**
 	 * Register an application name and type with its Maven coordinates.
@@ -67,7 +66,7 @@ public interface AppRegistryOperations {
 	 * @param uri   URI for the application artifact
 	 * @param force if {@code true}, overwrites a pre-existing registration
 	 */
-	AppRegistrationResource register(String name, ApplicationType type,
+	AppRegistrationResource register(String name, String type,
 			String uri, boolean force);
 
 	/**
@@ -76,7 +75,7 @@ public interface AppRegistryOperations {
 	 * @param name  application name
 	 * @param type  application type
 	 */
-	void unregister(String name, ApplicationType type);
+	void unregister(String name, String type);
 
 	/**
 	 * Register all applications listed in a properties file.

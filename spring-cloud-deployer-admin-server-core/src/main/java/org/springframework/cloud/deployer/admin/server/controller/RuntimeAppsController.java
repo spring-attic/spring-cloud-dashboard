@@ -21,8 +21,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.cloud.deployer.admin.core.ApplicationDefinition;
 import org.springframework.cloud.deployer.admin.rest.resource.AppInstanceStatusResource;
 import org.springframework.cloud.deployer.admin.rest.resource.AppStatusResource;
+import org.springframework.cloud.deployer.admin.server.repository.ApplicationDefinitionRepository;
 import org.springframework.cloud.deployer.admin.server.repository.DeploymentIdRepository;
 import org.springframework.cloud.deployer.spi.app.AppDeployer;
 import org.springframework.cloud.deployer.spi.app.AppInstanceStatus;
@@ -65,6 +67,8 @@ public class RuntimeAppsController {
 	 */
 	private final DeploymentIdRepository deploymentIdRepository;
 
+	private final ApplicationDefinitionRepository applicationDefinitionRepository;
+
 	/**
 	 * The deployer this controller will use to deploy stream apps.
 	 */
@@ -79,10 +83,12 @@ public class RuntimeAppsController {
 	 * @param deploymentIdRepository the repository this controller will use for deployment IDs
 	 * @param appDeployer the deployer this controller will use to deploy stream apps
 	 */
-	public RuntimeAppsController(DeploymentIdRepository deploymentIdRepository,
-			AppDeployer appDeployer) {
+	public RuntimeAppsController(ApplicationDefinitionRepository applicationDefinitionRepository,
+			DeploymentIdRepository deploymentIdRepository, AppDeployer appDeployer) {
+		Assert.notNull(applicationDefinitionRepository, "ApplicationDefinitionRepository must not be null");
 		Assert.notNull(deploymentIdRepository, "DeploymentIdRepository must not be null");
 		Assert.notNull(appDeployer, "AppDeployer must not be null");
+		this.applicationDefinitionRepository = applicationDefinitionRepository;
 		this.deploymentIdRepository = deploymentIdRepository;
 		this.appDeployer = appDeployer;
 	}
@@ -90,6 +96,15 @@ public class RuntimeAppsController {
 	@RequestMapping
 	public PagedResources<AppStatusResource> list(PagedResourcesAssembler<AppStatus> assembler) {
 		List<AppStatus> values = new ArrayList<>();
+
+		for (ApplicationDefinition applicationDefinition : this.applicationDefinitionRepository.findAll()) {
+			String key = forApplicationDefinition(applicationDefinition);
+			String id = this.deploymentIdRepository.findOne(key);
+			if (id != null) {
+				values.add(appDeployer.status(id));
+			}
+		}
+
 		Collections.sort(values, new Comparator<AppStatus>() {
 			@Override
 			public int compare(AppStatus o1, AppStatus o2) {
@@ -97,6 +112,11 @@ public class RuntimeAppsController {
 			}
 		});
 		return assembler.toResource(new PageImpl<>(values), statusAssembler);
+	}
+
+	public static String forApplicationDefinition(ApplicationDefinition applicationDefinition) {
+		Assert.notNull(applicationDefinition, "applicationDefinition must not be null");
+		return String.format("%s.%s", applicationDefinition.getRegisteredAppName(), applicationDefinition.getName());
 	}
 
 	@RequestMapping("/{id}")

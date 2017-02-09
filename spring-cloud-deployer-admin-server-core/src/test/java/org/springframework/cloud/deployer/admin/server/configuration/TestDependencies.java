@@ -23,17 +23,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.deployer.admin.completion.CompletionConfiguration;
 import org.springframework.cloud.deployer.admin.configuration.metadata.ApplicationConfigurationMetadataResolver;
 import org.springframework.cloud.deployer.admin.registry.AppRegistry;
+import org.springframework.cloud.deployer.admin.registry.EavRegistryRepository;
 import org.springframework.cloud.deployer.admin.server.config.apps.CommonApplicationProperties;
 import org.springframework.cloud.deployer.admin.server.controller.AppRegistryController;
 import org.springframework.cloud.deployer.admin.server.controller.CompletionController;
 import org.springframework.cloud.deployer.admin.server.controller.RestControllerAdvice;
 import org.springframework.cloud.deployer.admin.server.registry.DataFlowUriRegistryPopulator;
-import org.springframework.cloud.deployer.admin.server.repository.DeploymentIdRepository;
 import org.springframework.cloud.deployer.resource.maven.MavenProperties;
 import org.springframework.cloud.deployer.resource.maven.MavenResourceLoader;
 import org.springframework.cloud.deployer.resource.registry.InMemoryUriRegistry;
@@ -107,8 +106,13 @@ public class TestDependencies extends WebMvcConfigurationSupport {
 	}
 
 	@Bean
+	public EavRegistryRepository eavRegistryRepository() {
+		return mock(EavRegistryRepository.class);
+	}
+
+	@Bean
 	public AppRegistry appRegistry() {
-		return new AppRegistry(uriRegistry(), resourceLoader());
+		return new AppRegistry(uriRegistry(), resourceLoader(), eavRegistryRepository());
 	}
 
 	@Bean

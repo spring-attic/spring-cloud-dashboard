@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.cloud.deployer.admin.server.support;
 
-/**
- * Exception is thrown by {@link DataFlowServerUtil} to indicate that
- * the {@link ApplicationType} for a provided {@link StreamAppDefinition} cannot be
- * determined.
- *
- * @author Gunnar Hillert
- *
- */
-public class CannotDetermineApplicationTypeException extends RuntimeException {
+package org.springframework.cloud.deployer.admin.registry;
 
-	private static final long serialVersionUID = 1L;
+import java.util.Map;
 
-	public CannotDetermineApplicationTypeException(String message) {
-		super(message);
-	}
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface EavRegistryRepository extends org.springframework.data.repository.Repository<String, String> {
+
+	void save(String namespace, String attribute, String value);
+
+	String findOne(String namespace, String attribute);
+
+	Map<String, String> findAll(String namespace);
 }

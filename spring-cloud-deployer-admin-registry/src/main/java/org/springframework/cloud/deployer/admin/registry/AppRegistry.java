@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.cloud.deployer.admin.core.ApplicationType;
 import org.springframework.cloud.deployer.admin.registry.support.NoSuchAppRegistrationException;
 import org.springframework.cloud.deployer.resource.registry.UriRegistry;
 import org.springframework.cloud.deployer.resource.registry.UriRegistryPopulator;
@@ -44,14 +43,17 @@ public class AppRegistry {
 
 	private final ResourceLoader resourceLoader;
 
-	public AppRegistry(UriRegistry uriRegistry, ResourceLoader resourceLoader) {
+	private EavRegistryRepository eavRegistryRepository;
+
+	public AppRegistry(UriRegistry uriRegistry, ResourceLoader resourceLoader, EavRegistryRepository eavRegistryRepository) {
 		this.uriRegistry = uriRegistry;
 		this.uriRegistryPopulator = new UriRegistryPopulator();
 		this.uriRegistryPopulator.setResourceLoader(resourceLoader);
 		this.resourceLoader = resourceLoader;
+		this.eavRegistryRepository = eavRegistryRepository;
 	}
 
-	public AppRegistration find(String name, ApplicationType type) {
+	public AppRegistration find(String name, String type) {
 		try {
 			URI uri = this.uriRegistry.find(key(name, type));
 			return new AppRegistration(name, type, uri, this.resourceLoader);
@@ -69,8 +71,9 @@ public class AppRegistry {
 		return apps;
 	}
 
-	public AppRegistration save(String name, ApplicationType type, URI uri) {
+	public AppRegistration save(String name, String type, URI uri) {
 		this.uriRegistry.register(key(name, type), uri);
+		this.eavRegistryRepository.save("spring-cloud-deployer-admin-app-" + name, "type", type);
 		return new AppRegistration(name, type, uri, this.resourceLoader);
 	}
 
@@ -98,7 +101,7 @@ public class AppRegistry {
 	 * @param name Name of the AppRegistration to delete
 	 * @param type Type of the AppRegistration to delete
 	 */
-	public void delete(String name, ApplicationType type) {
+	public void delete(String name, String type) {
 		if (this.find(name, type) != null) {
 			this.uriRegistry.unregister(key(name, type));
 		}
@@ -107,7 +110,7 @@ public class AppRegistry {
 		}
 	}
 
-	private String key(String name, ApplicationType type) {
+	private String key(String name, String type) {
 		return String.format("%s.%s", type, name);
 	}
 
@@ -117,6 +120,6 @@ public class AppRegistry {
 			throw new IllegalArgumentException("Invalid application key: " + key +
 					"; the expected format is <name>.<type>");
 		}
-		return new AppRegistration(tokens[1], ApplicationType.valueOf(tokens[0]), uri, this.resourceLoader);
+		return new AppRegistration(tokens[1], tokens[0], uri, this.resourceLoader);
 	}
 }

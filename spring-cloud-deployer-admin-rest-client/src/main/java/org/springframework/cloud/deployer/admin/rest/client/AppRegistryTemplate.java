@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 the original author or authors.
+ * Copyright 2015-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.springframework.cloud.deployer.admin.rest.client;
 
 import java.util.Properties;
 
-import org.springframework.cloud.deployer.admin.core.ApplicationType;
 import org.springframework.cloud.deployer.admin.rest.resource.AppRegistrationResource;
 import org.springframework.cloud.deployer.admin.rest.resource.DetailedAppRegistrationResource;
 import org.springframework.hateoas.PagedResources;
@@ -63,29 +62,29 @@ public class AppRegistryTemplate implements AppRegistryOperations {
 
 	@Override
 	public PagedResources<AppRegistrationResource> list() {
-		return list(/* ApplicationType */null);
+		return list(null);
 	}
 
 	@Override
-	public PagedResources<AppRegistrationResource> list(ApplicationType type) {
-		String uri = uriTemplate + "?size=10000" + ((type == null) ? "" : "&type=" + type.name());
+	public PagedResources<AppRegistrationResource> list(String type) {
+		String uri = uriTemplate + "?size=10000" + ((type == null) ? "" : "&type=" + type);
 		return restTemplate.getForObject(uri, AppRegistrationResource.Page.class);
 	}
 
 	@Override
-	public void unregister(String name, ApplicationType applicationType) {
+	public void unregister(String name, String applicationType) {
 		String uri = uriTemplate.toString() + "/{type}/{name}";
-		restTemplate.delete(uri, applicationType.name(), name);
+		restTemplate.delete(uri, applicationType, name);
 	}
 
 	@Override
-	public DetailedAppRegistrationResource info(String name, ApplicationType type) {
+	public DetailedAppRegistrationResource info(String name, String type) {
 		String uri = uriTemplate.toString() + "/{type}/{name}";
 		return restTemplate.getForObject(uri, DetailedAppRegistrationResource.class, type, name);
 	}
 
 	@Override
-	public AppRegistrationResource register(String name, ApplicationType type,
+	public AppRegistrationResource register(String name, String type,
 			String uri, boolean force) {
 		MultiValueMap<String, Object> values = new LinkedMultiValueMap<String, Object>();
 		values.add("uri", uri);

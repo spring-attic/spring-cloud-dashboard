@@ -31,7 +31,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.cloud.deployer.admin.core.ApplicationType;
 import org.springframework.cloud.deployer.admin.rest.client.AppRegistryOperations;
 import org.springframework.cloud.deployer.admin.rest.client.DataFlowOperations;
 import org.springframework.cloud.deployer.admin.rest.resource.AppRegistrationResource;
@@ -101,12 +100,12 @@ public class AppRegistryCommandsTests {
 		when(appRegistryOperations.list()).thenReturn(result);
 
 		Object[][] expected = new String[][] {
-				{"source", "processor", "sink", "task"},
-				{"http", "filter", "log", null},
-				{"file", "transform", null, null},
-				{null, "moving-average", null, null},
+				{ "source", "processor", "sink" },
+				{ "http", "filter", "log" },
+				{ "file", "transform", null },
+				{ null, "moving-average", null }
 		};
-		TableModel model = ((Table)appRegistryCommands.list()).getModel();
+		TableModel model = ((Table) appRegistryCommands.list()).getModel();
 		for (int row = 0; row < expected.length; row++) {
 			for (int col = 0; col < expected[row].length; col++) {
 				assertThat(model.getValue(row, col), Matchers.is(expected[row][col]));
@@ -116,17 +115,17 @@ public class AppRegistryCommandsTests {
 
 	@Test
 	public void testUnknownModule() {
-		List<Object> result = appRegistryCommands.info(new AppRegistryCommands.QualifiedApplicationName("unknown", ApplicationType.processor));
+		List<Object> result = appRegistryCommands.info(new AppRegistryCommands.QualifiedApplicationName("unknown", "processor"));
 		assertEquals((String) result.get(0), "Application info is not available for processor:unknown");
 	}
 
 	@Test
 	public void register() {
 		String name = "foo";
-		ApplicationType type = ApplicationType.sink;
+		String type = "sink";
 		String uri = "file:///foo";
 		boolean force = false;
-		AppRegistrationResource resource = new AppRegistrationResource(name, type.name(), uri);
+		AppRegistrationResource resource = new AppRegistrationResource(name, type, uri);
 		when(appRegistryOperations.register(name, type, uri, force)).thenReturn(resource);
 		String result = appRegistryCommands.register(name, type, uri, force);
 		assertEquals("Successfully registered application 'sink:foo'", result);
@@ -135,17 +134,17 @@ public class AppRegistryCommandsTests {
 	@Test
 	public void importFromLocalResource() {
 		String name1 = "foo";
-		ApplicationType type1 = ApplicationType.source;
+		String type1 = "source";
 		String uri1 = "file:///foo";
 		String name2 = "bar";
-		ApplicationType type2 = ApplicationType.sink;
+		String type2 = "sink";
 		String uri2 = "file:///bar";
 		Properties apps = new Properties();
-		apps.setProperty(type1.name() + "." + name1, uri1);
-		apps.setProperty(type2.name() + "." + name2, uri2);
+		apps.setProperty(type1 + "." + name1, uri1);
+		apps.setProperty(type2 + "." + name2, uri2);
 		List<AppRegistrationResource> resources = new ArrayList<>();
-		resources.add(new AppRegistrationResource(name1, type1.name(), uri1));
-		resources.add(new AppRegistrationResource(name2, type2.name(), uri2));
+		resources.add(new AppRegistrationResource(name1, type1, uri1));
+		resources.add(new AppRegistrationResource(name2, type2, uri2));
 		PagedResources<AppRegistrationResource> pagedResources = new PagedResources<>(resources,
 				new PagedResources.PageMetadata(resources.size(), 1, resources.size(), 1));
 		when(appRegistryOperations.registerAll(apps, true)).thenReturn(pagedResources);

@@ -32,6 +32,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.deployer.admin.completion.CompletionConfiguration;
 import org.springframework.cloud.deployer.admin.configuration.metadata.ApplicationConfigurationMetadataResolver;
 import org.springframework.cloud.deployer.admin.registry.AppRegistry;
+import org.springframework.cloud.deployer.admin.registry.EavRegistryRepository;
+import org.springframework.cloud.deployer.admin.registry.RdbmsEavRegistryRepository;
 import org.springframework.cloud.deployer.admin.registry.RdbmsUriRegistry;
 import org.springframework.cloud.deployer.admin.server.config.apps.CommonApplicationProperties;
 import org.springframework.cloud.deployer.admin.server.config.features.FeaturesProperties;
@@ -79,13 +81,19 @@ import org.springframework.hateoas.EntityLinks;
 public class DataFlowControllerAutoConfiguration {
 
 	@Bean
+	public EavRegistryRepository eavRegistryRepository(DataSource dataSource) {
+		return new RdbmsEavRegistryRepository(dataSource);
+	}
+
+	@Bean
 	public UriRegistry uriRegistry(DataSource dataSource) {
 		return new RdbmsUriRegistry(dataSource);
 	}
 
 	@Bean
-	public AppRegistry appRegistry(UriRegistry uriRegistry, DelegatingResourceLoader resourceLoader) {
-		return new AppRegistry(uriRegistry, resourceLoader);
+	public AppRegistry appRegistry(UriRegistry uriRegistry, DelegatingResourceLoader resourceLoader,
+			EavRegistryRepository eavRegistryRepository) {
+		return new AppRegistry(uriRegistry, resourceLoader, eavRegistryRepository);
 	}
 
 	@Bean
@@ -96,6 +104,13 @@ public class DataFlowControllerAutoConfiguration {
 	@Bean
 	public AppInstanceController appInstanceController(AppDeployer appDeployer) {
 		return new AppInstanceController(appDeployer);
+	}
+
+	@Bean
+	@ConditionalOnBean(ApplicationDefinitionRepository.class)
+	public RuntimeAppsController runtimeAppsController(ApplicationDefinitionRepository repository,
+			DeploymentIdRepository deploymentIdRepository, AppDeployer appDeployer) {
+		return new RuntimeAppsController(repository, deploymentIdRepository, appDeployer);
 	}
 
 	@Bean
@@ -132,9 +147,11 @@ public class DataFlowControllerAutoConfiguration {
 	@Bean
 	@ConditionalOnBean(ApplicationDefinitionRepository.class)
 	public ApplicationDeploymentController applicationDeploymentController(ApplicationDefinitionRepository repository,
-			DeploymentIdRepository deploymentIdRepository, AppDeployer deployer, AppRegistry appRegistry,
-			ApplicationConfigurationMetadataResolver metadataResolver, CommonApplicationProperties appsProperties) {
-		return new ApplicationDeploymentController(repository, deploymentIdRepository, deployer, appRegistry, metadataResolver, appsProperties);
+			DeploymentIdRepository deploymentIdRepository, EavRegistryRepository eavRegistryRepository,
+			AppDeployer deployer, AppRegistry appRegistry, ApplicationConfigurationMetadataResolver metadataResolver,
+			CommonApplicationProperties appsProperties) {
+		return new ApplicationDeploymentController(repository, deploymentIdRepository, eavRegistryRepository, deployer,
+				appRegistry, metadataResolver, appsProperties);
 	}
 
 	@Bean

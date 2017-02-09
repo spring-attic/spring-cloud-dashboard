@@ -24,7 +24,6 @@ import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataProperty;
-import org.springframework.cloud.deployer.admin.core.ApplicationType;
 import org.springframework.cloud.deployer.admin.rest.client.AppRegistryOperations;
 import org.springframework.cloud.deployer.admin.rest.client.DataFlowOperations;
 import org.springframework.cloud.deployer.admin.rest.resource.AppRegistrationResource;
@@ -153,7 +152,7 @@ public class AppRegistryCommands implements CommandMarker, ResourceLoaderAware {
 			@CliOption(mandatory = true,
 					key = {"type"},
 					help = "the type for the registered application")
-			ApplicationType type,
+					String type,
 			@CliOption(mandatory = true,
 					key = {"uri"},
 					help = "URI for the application artifact")
@@ -176,7 +175,7 @@ public class AppRegistryCommands implements CommandMarker, ResourceLoaderAware {
 			@CliOption(mandatory = true,
 					key = {"type"},
 					help = "type of the application to unregister")
-					ApplicationType type) {
+					String type) {
 
 		appRegistryOperations().unregister(name, type);
 		return String.format(("Successfully unregistered application '%s' with type %s"),
@@ -187,11 +186,13 @@ public class AppRegistryCommands implements CommandMarker, ResourceLoaderAware {
 	public Object list() {
 		PagedResources<AppRegistrationResource> appRegistrations = appRegistryOperations().list();
 		final LinkedHashMap<String, List<String>> mappings = new LinkedHashMap<>();
-		for (ApplicationType type : ApplicationType.values()) {
-			mappings.put(type.name(), new ArrayList<String>());
-		}
+
 		int max = 0;
 		for (AppRegistrationResource appRegistration : appRegistrations) {
+			// for now just add new type column for every type
+			if (!mappings.containsKey(appRegistration.getType())) {
+				mappings.put(appRegistration.getType(), new ArrayList<String>());
+			}
 			List<String> column = mappings.get(appRegistration.getType());
 			column.add(appRegistration.getName());
 			max = Math.max(max, column.size());
@@ -299,11 +300,11 @@ public class AppRegistryCommands implements CommandMarker, ResourceLoaderAware {
 	 */
 	public static class QualifiedApplicationName {
 
-		public ApplicationType type;
+		public String type;
 
 		public String name;
 
-		public QualifiedApplicationName(String name, ApplicationType type) {
+		public QualifiedApplicationName(String name, String type) {
 			this.name = name;
 			this.type = type;
 		}

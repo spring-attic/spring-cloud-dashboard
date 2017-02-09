@@ -26,9 +26,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.cloud.deployer.admin.configuration.metadata.ApplicationConfigurationMetadataResolver;
 import org.springframework.cloud.deployer.admin.core.ApplicationDefinition;
-import org.springframework.cloud.deployer.admin.core.ApplicationType;
 import org.springframework.cloud.deployer.admin.registry.AppRegistration;
 import org.springframework.cloud.deployer.admin.registry.AppRegistry;
+import org.springframework.cloud.deployer.admin.registry.EavRegistryRepository;
 import org.springframework.cloud.deployer.admin.rest.resource.ApplicationDeploymentResource;
 import org.springframework.cloud.deployer.admin.rest.util.DeploymentPropertiesUtils;
 import org.springframework.cloud.deployer.admin.server.config.apps.CommonApplicationProperties;
@@ -64,18 +64,22 @@ public class ApplicationDeploymentController {
 	private final AppRegistry appRegistry;
 	private final WhitelistProperties whitelistProperties;
 	private final CommonApplicationProperties commonApplicationProperties;
+	private final EavRegistryRepository eavRegistryRepository;
 
 	public ApplicationDeploymentController(ApplicationDefinitionRepository definitionRepository,
-			DeploymentIdRepository deploymentIdRepository, AppDeployer appDeployer, AppRegistry appRegistry,
+			DeploymentIdRepository deploymentIdRepository, EavRegistryRepository eavRegistryRepository,
+			AppDeployer appDeployer, AppRegistry appRegistry,
 			ApplicationConfigurationMetadataResolver metadataResolver, CommonApplicationProperties commonProperties) {
 		Assert.notNull(definitionRepository, "ApplicationDefinitionRepository must not be null");
 		Assert.notNull(deploymentIdRepository, "DeploymentIdRepository must not be null");
+		Assert.notNull(eavRegistryRepository, "EavRegistryRepository must not be null");
 		Assert.notNull(appDeployer, "AppDeployer must not be null");
 		Assert.notNull(appRegistry, "AppRegistry must not be null");
 		Assert.notNull(commonProperties, "CommonApplicationProperties must not be null");
 		Assert.notNull(metadataResolver, "MetadataResolver must not be null");
 		this.definitionRepository = definitionRepository;
 		this.deploymentIdRepository = deploymentIdRepository;
+		this.eavRegistryRepository = eavRegistryRepository;
 		this.appDeployer = appDeployer;
 		this.appRegistry = appRegistry;
 		this.whitelistProperties = new WhitelistProperties(metadataResolver);
@@ -143,7 +147,9 @@ public class ApplicationDeploymentController {
 			applicationDeploymentProperties = Collections.emptyMap();
 		}
 
-		AppRegistration registration = this.appRegistry.find(application.getRegisteredAppName(), ApplicationType.generic);
+		String type = eavRegistryRepository.findOne("spring-cloud-deployer-admin-app-" + application.getRegisteredAppName(), "type");
+
+		AppRegistration registration = this.appRegistry.find(application.getRegisteredAppName(), type);
 
 		Map<String, String> deployerDeploymentProperties = DeploymentPropertiesUtils
 				.extractAndQualifyDeployerProperties(applicationDeploymentProperties, application.getRegisteredAppName());

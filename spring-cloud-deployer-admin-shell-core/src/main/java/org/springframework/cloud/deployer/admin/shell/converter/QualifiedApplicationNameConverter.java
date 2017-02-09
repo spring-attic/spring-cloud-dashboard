@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 the original author or authors.
+ * Copyright 2013-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package org.springframework.cloud.deployer.admin.shell.converter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.deployer.admin.core.ApplicationType;
 import org.springframework.cloud.deployer.admin.rest.resource.AppRegistrationResource;
 import org.springframework.cloud.deployer.admin.shell.command.AppRegistryCommands;
 import org.springframework.cloud.deployer.admin.shell.config.DataFlowShell;
@@ -55,7 +54,7 @@ public class QualifiedApplicationNameConverter implements Converter<AppRegistryC
 		if (colonIndex == -1) {
 			throw new ShellException("Incorrect syntax. Valid syntax is '<ApplicationType>:<ApplicationName>'.");
 		}
-		ApplicationType applicationType = ApplicationType.valueOf(value.substring(0, colonIndex));
+		String applicationType = value.substring(0, colonIndex);
 		return new AppRegistryCommands.QualifiedApplicationName(value.substring(colonIndex + 1), applicationType);
 	}
 

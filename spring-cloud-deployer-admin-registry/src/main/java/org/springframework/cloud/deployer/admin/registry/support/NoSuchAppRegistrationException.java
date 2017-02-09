@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2016-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package org.springframework.cloud.deployer.admin.registry.support;
 
-import org.springframework.cloud.deployer.admin.core.ApplicationType;
 import org.springframework.cloud.deployer.admin.registry.AppRegistration;
 
 /**
- * Thrown when an {@link AppRegistration} of a given name and {@link ApplicationType}
+ * Thrown when an {@link AppRegistration} of a given name and {code type}
  * was expected but did not exist.
  *
  * @author Gunnar Hillert
@@ -28,7 +27,7 @@ public class NoSuchAppRegistrationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public NoSuchAppRegistrationException(String name, ApplicationType type) {
+	public NoSuchAppRegistrationException(String name, String type) {
 		super(String.format("The '%s:%s' application could not be found.", type, name));
 	}
 }

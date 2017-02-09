@@ -20,13 +20,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataProperty;
 import org.springframework.cloud.deployer.admin.configuration.metadata.ApplicationConfigurationMetadataResolver;
-import org.springframework.cloud.deployer.admin.core.ApplicationType;
 import org.springframework.cloud.deployer.admin.registry.AppRegistration;
 import org.springframework.cloud.deployer.admin.registry.AppRegistry;
 import org.springframework.cloud.deployer.admin.registry.support.NoSuchAppRegistrationException;
@@ -82,16 +80,9 @@ public class AppRegistryController {
 	@ResponseStatus(HttpStatus.OK)
 	public PagedResources<? extends AppRegistrationResource> list(
 			PagedResourcesAssembler<AppRegistration> pagedResourcesAssembler,
-			@RequestParam(value = "type", required = false) ApplicationType type,
 			@RequestParam(value = "detailed", defaultValue = "false") boolean detailed) {
 
 		List<AppRegistration> list = new ArrayList<>(appRegistry.findAll());
-		for (Iterator<AppRegistration> iterator = list.iterator(); iterator.hasNext(); ) {
-			ApplicationType applicationType = iterator.next().getType();
-			if (type != null && applicationType != type) {
-				iterator.remove();
-			}
-		}
 		Collections.sort(list);
 		return pagedResourcesAssembler.toResource(new PageImpl<>(list), assembler);
 	}
@@ -105,7 +96,7 @@ public class AppRegistryController {
 	@RequestMapping(value = "/{type}/{name}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public DetailedAppRegistrationResource info(
-			@PathVariable("type") ApplicationType type,
+			@PathVariable("type") String type,
 			@PathVariable("name") String name) {
 		AppRegistration registration = appRegistry.find(name, type);
 		if (registration == null) {
@@ -131,7 +122,7 @@ public class AppRegistryController {
 	@RequestMapping(value = "/{type}/{name}", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void register(
-			@PathVariable("type") ApplicationType type,
+			@PathVariable("type") String type,
 			@PathVariable("name") String name,
 			@RequestParam("uri") String uri,
 			@RequestParam(value = "force", defaultValue = "false") boolean force) {
@@ -156,7 +147,7 @@ public class AppRegistryController {
 	 */
 	@RequestMapping(value = "/{type}/{name}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.OK)
-	public void unregister(@PathVariable("type") ApplicationType type, @PathVariable("name") String name) {
+	public void unregister(@PathVariable("type") String type, @PathVariable("name") String name) {
 		appRegistry.delete(name, type);
 	}
 
@@ -185,7 +176,7 @@ public class AppRegistryController {
 							"; the expected format is <name>.<type>");
 				}
 				String name = tokens[1];
-				ApplicationType type = ApplicationType.valueOf(tokens[0]);
+				String type = tokens[0];
 				if (force || null == appRegistry.find(name, type)) {
 					try {
 						registrations.add(appRegistry.save(name, type, new URI(apps.getProperty(key))));
@@ -214,7 +205,7 @@ public class AppRegistryController {
 		@Override
 		protected AppRegistrationResource instantiateResource(AppRegistration registration) {
 			return new AppRegistrationResource(registration.getName(),
-					registration.getType().name(), registration.getUri().toString());
+					registration.getType(), registration.getUri().toString());
 		}
 	}
 }
