@@ -1,3 +1,6 @@
+# This repository is no longer actively maintained by VMware, Inc.
+
+
 == Spring Cloud Deployer Admin
 
 === Building
