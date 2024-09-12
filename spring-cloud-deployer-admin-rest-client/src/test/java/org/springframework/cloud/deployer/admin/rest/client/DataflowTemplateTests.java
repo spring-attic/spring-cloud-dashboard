@@ -64,7 +64,7 @@ public class DataflowTemplateTests {
 
 	@Test(expected = ResourceAccessException.class)
 	public void testDataFlowTemplateContructorWithNonExistingUri() throws URISyntaxException {
-			new DataFlowTemplate(new URI("http://doesnotexist:1234"));
+			new DataFlowTemplate(new URI("https://doesnotexist:1234"));
 	}
 
 	@Test
