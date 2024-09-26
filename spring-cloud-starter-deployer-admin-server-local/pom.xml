@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>spring-cloud-starter-deployer-admin-server-local</artifactId>
 	<description>Local Data Flow Server Starter</description>
-	<url>http://projects.spring.io/spring-cloud/</url>
+	<url>https://projects.spring.io/spring-cloud/</url>
 	<packaging>jar</packaging>
 	<organization>
 		<name>Pivotal Software, Inc.</name>
-		<url>http://www.spring.io</url>
+		<url>https://www.spring.io</url>
 	</organization>
 	<parent>
 		<groupId>org.springframework.cloud</groupId>
